@@ -7,19 +7,19 @@
   
   <title>初探C++11智能指针 | Hexo</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="智能指针的由来在远古时代，C++发明了指针这把双刃剑，既可以让程序员精确地控制堆上每一块内存，也让程序更容易发生crash，大大增加了使用指针的技术门槛。因此，从C++98开始便推出了auto_ptr，对裸指针进行封装，让程序员无需手动释放指针指向的内存区域，在auto_ptr生命周期结束时自动释放，然而，由于auto_ptr在转移指针所有权后会产生野指针，导致程序运行时crash，如下面示例代码">
+  <meta name="description" content="C++指针的内存管理相信是大部分C++入门程序员的梦魇，受到Boost的启发，C++11标准推出了智能指针，让我们从指针的内存管理中释放出来，几乎消灭所有new和delete。既然智能指针如此强大，今天我们来一窥智能指针的原理以及在多线程操作中需要注意的细节。 智能指针的由来在远古时代，C++发明了指针这把双刃剑，既可以让程序员精确地控制堆上每一块内存，也让程序更容易发生crash，大大增加了使用">
 <meta name="keywords" content="C++11 智能指针 线程安全 引用计数">
 <meta property="og:type" content="article">
 <meta property="og:title" content="初探C++11智能指针">
 <meta property="og:url" content="http://yoursite.com/2019/07/25/初探C-11智能指针/index.html">
 <meta property="og:site_name" content="Hexo">
-<meta property="og:description" content="智能指针的由来在远古时代，C++发明了指针这把双刃剑，既可以让程序员精确地控制堆上每一块内存，也让程序更容易发生crash，大大增加了使用指针的技术门槛。因此，从C++98开始便推出了auto_ptr，对裸指针进行封装，让程序员无需手动释放指针指向的内存区域，在auto_ptr生命周期结束时自动释放，然而，由于auto_ptr在转移指针所有权后会产生野指针，导致程序运行时crash，如下面示例代码">
+<meta property="og:description" content="C++指针的内存管理相信是大部分C++入门程序员的梦魇，受到Boost的启发，C++11标准推出了智能指针，让我们从指针的内存管理中释放出来，几乎消灭所有new和delete。既然智能指针如此强大，今天我们来一窥智能指针的原理以及在多线程操作中需要注意的细节。 智能指针的由来在远古时代，C++发明了指针这把双刃剑，既可以让程序员精确地控制堆上每一块内存，也让程序更容易发生crash，大大增加了使用">
 <meta property="og:locale" content="default">
 <meta property="og:image" content="https://ask.qcloudimg.com/draft/1082555/tv4laz8txd.png">
-<meta property="og:updated_time" content="2019-07-25T03:30:23.041Z">
+<meta property="og:updated_time" content="2019-07-25T03:40:10.395Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="初探C++11智能指针">
-<meta name="twitter:description" content="智能指针的由来在远古时代，C++发明了指针这把双刃剑，既可以让程序员精确地控制堆上每一块内存，也让程序更容易发生crash，大大增加了使用指针的技术门槛。因此，从C++98开始便推出了auto_ptr，对裸指针进行封装，让程序员无需手动释放指针指向的内存区域，在auto_ptr生命周期结束时自动释放，然而，由于auto_ptr在转移指针所有权后会产生野指针，导致程序运行时crash，如下面示例代码">
+<meta name="twitter:description" content="C++指针的内存管理相信是大部分C++入门程序员的梦魇，受到Boost的启发，C++11标准推出了智能指针，让我们从指针的内存管理中释放出来，几乎消灭所有new和delete。既然智能指针如此强大，今天我们来一窥智能指针的原理以及在多线程操作中需要注意的细节。 智能指针的由来在远古时代，C++发明了指针这把双刃剑，既可以让程序员精确地控制堆上每一块内存，也让程序更容易发生crash，大大增加了使用">
 <meta name="twitter:image" content="https://ask.qcloudimg.com/draft/1082555/tv4laz8txd.png">
   
     <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
@@ -89,18 +89,19 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h1 id="智能指针的由来"><a href="#智能指针的由来" class="headerlink" title="智能指针的由来"></a>智能指针的由来</h1><p>在远古时代，C++发明了指针这把双刃剑，既可以让程序员精确地控制堆上每一块内存，也让程序更容易发生crash，大大增加了使用指针的技术门槛。因此，从C++98开始便推出了auto_ptr，对裸指针进行封装，让程序员无需手动释放指针指向的内存区域，在auto_ptr生命周期结束时自动释放，然而，由于auto_ptr在转移指针所有权后会产生野指针，导致程序运行时crash，如下面示例代码所示：</p>
+        <p>C++指针的内存管理相信是大部分C++入门程序员的梦魇，受到Boost的启发，C++11标准推出了智能指针，让我们从指针的内存管理中释放出来，几乎消灭所有new和delete。既然智能指针如此强大，今天我们来一窥智能指针的原理以及在多线程操作中需要注意的细节。</p>
+<h2 id="智能指针的由来"><a href="#智能指针的由来" class="headerlink" title="智能指针的由来"></a>智能指针的由来</h2><p>在远古时代，C++发明了指针这把双刃剑，既可以让程序员精确地控制堆上每一块内存，也让程序更容易发生crash，大大增加了使用指针的技术门槛。因此，从C++98开始便推出了auto_ptr，对裸指针进行封装，让程序员无需手动释放指针指向的内存区域，在auto_ptr生命周期结束时自动释放，然而，由于auto_ptr在转移指针所有权后会产生野指针，导致程序运行时crash，如下面示例代码所示：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">auto_ptr&lt;int&gt; p1(new int(10));</span><br><span class="line">auto_ptr&lt;int&gt; p2 = p1; //转移控制权</span><br><span class="line">*p1 += 10; //crash，p1为空指针，可以用p1-&gt;get判空做保护</span><br></pre></td></tr></table></figure>
 
 <p>因此在C++11又推出了unique_ptr、shared_ptr、weak_ptr三种智能指针，慢慢取代auto_ptr。</p>
-<h1 id="unique-ptr的使用"><a href="#unique-ptr的使用" class="headerlink" title="unique_ptr的使用"></a>unique_ptr的使用</h1><p>unique_ptr是auto_ptr的继承者，对于同一块内存只能有一个持有者，而unique_ptr和auto_ptr唯一区别就是unique_ptr不允许赋值操作，也就是不能放在等号的右边（函数的参数和返回值例外），这一定程度避免了一些误操作导致指针所有权转移，然而，unique_str依然有提供所有权转移的方法move，调用move后，原unique_ptr就会失效，再用其访问裸指针也会发生和auto_ptr相似的crash，如下面示例代码，所以，即使使用了unique_ptr，也要慎重使用move方法，防止指针所有权被转移。</p>
+<h2 id="unique-ptr的使用"><a href="#unique-ptr的使用" class="headerlink" title="unique_ptr的使用"></a>unique_ptr的使用</h2><p>unique_ptr是auto_ptr的继承者，对于同一块内存只能有一个持有者，而unique_ptr和auto_ptr唯一区别就是unique_ptr不允许赋值操作，也就是不能放在等号的右边（函数的参数和返回值例外），这一定程度避免了一些误操作导致指针所有权转移，然而，unique_str依然有提供所有权转移的方法move，调用move后，原unique_ptr就会失效，再用其访问裸指针也会发生和auto_ptr相似的crash，如下面示例代码，所以，即使使用了unique_ptr，也要慎重使用move方法，防止指针所有权被转移。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">unique_ptr&lt;int&gt; up(new int(5));</span><br><span class="line">//auto up2 = up; // 编译错误</span><br><span class="line">auto up2 = move(up);</span><br><span class="line">cout &lt;&lt; *up &lt;&lt; endl; //crash，up已经失效，无法访问其裸指针</span><br></pre></td></tr></table></figure>
 
 <p>除了上述用法，unique_ptr还支持创建动态数组。在C++中，创建数组有很多方法，如下所示：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">// 静态数组，在编译时决定了数组大小</span><br><span class="line">int arr[10]; </span><br><span class="line"></span><br><span class="line">// 通过指针创建在堆上的数组，可在运行时动态指定数组大小，但需要手动释放内存</span><br><span class="line">int *arr = new int[10];</span><br><span class="line"></span><br><span class="line">// 通过std::vector容器创建动态数组，无需手动释放数组内存</span><br><span class="line">vector&lt;int&gt; arr(10);</span><br><span class="line"></span><br><span class="line">// 通过unique_ptr创建动态数组，也无需手动释放数组内存，比vector更轻量化</span><br><span class="line">unique_ptr&lt;int[]&gt; arr(new int[10]);</span><br></pre></td></tr></table></figure>
 
 <p>这里需要注意的是，不管vector还是unique_ptr，虽然可以帮我们自动释放数组内存，但如果数组的元素是复杂数据类型时，我们还需要在其析构函数中正确释放内存。</p>
-<h1 id="真正的智能指针：shared-ptr"><a href="#真正的智能指针：shared-ptr" class="headerlink" title="真正的智能指针：shared_ptr"></a>真正的智能指针：shared_ptr</h1><p>auto_ptr和unique_ptr都有或多或少的缺陷，因此C++11还推出了shared_ptr，这也是目前工程内使用最多最广泛的智能指针，他使用引用计数（感觉有参考Objective-C的嫌疑），实现对同一块内存可以有多个引用，在最后一个引用被释放时，指向的内存才释放，这也是和unique_ptr最大的区别。</p>
+<h2 id="真正的智能指针：shared-ptr"><a href="#真正的智能指针：shared-ptr" class="headerlink" title="真正的智能指针：shared_ptr"></a>真正的智能指针：shared_ptr</h2><p>auto_ptr和unique_ptr都有或多或少的缺陷，因此C++11还推出了shared_ptr，这也是目前工程内使用最多最广泛的智能指针，他使用引用计数（感觉有参考Objective-C的嫌疑），实现对同一块内存可以有多个引用，在最后一个引用被释放时，指向的内存才释放，这也是和unique_ptr最大的区别。</p>
 <p>另外，使用shared_ptr过程中有几点需要注意：</p>
 <ul>
 <li>构造shared_ptr的方法，如下示例代码所示，我们尽量使用shared_ptr构造函数或者make_shared的方式创建shared_ptr，禁止使用裸指针赋值的方式，这样会shared_ptr难于管理指针的生命周期。</li>
@@ -127,25 +128,25 @@
 </ul>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">class A &#123;</span><br><span class="line">public:</span><br><span class="line">    shared_ptr&lt;B&gt; b;</span><br><span class="line">&#125;;</span><br><span class="line">class B &#123;</span><br><span class="line">public:</span><br><span class="line">    shared_ptr&lt;A&gt; a;</span><br><span class="line">&#125;;</span><br><span class="line">int main(int argc, const char * argv[]) &#123;</span><br><span class="line">    shared_ptr&lt;A&gt; spa = make_shared&lt;A&gt;();</span><br><span class="line">    shared_ptr&lt;B&gt; spb = make_shared&lt;B&gt;();</span><br><span class="line">    spa-&gt;b = spb;</span><br><span class="line">    spb-&gt;a = spa;</span><br><span class="line">    return 0; </span><br><span class="line">&#125; //main函数退出后，spa和spb强引用计数依然为1，无法释放</span><br></pre></td></tr></table></figure>
 
-<h1 id="刚柔并济：weak-ptr"><a href="#刚柔并济：weak-ptr" class="headerlink" title="刚柔并济：weak_ptr"></a>刚柔并济：weak_ptr</h1><p>正如上一章提到，使用shared_ptr过程中有可能会出现循环引用，关键原因是使用shared_ptr引用一个指针时会导致强引用计数+1，从此该指针的生命周期就会取决于该shared_ptr的生命周期，然而，有些情况我们一个类A里面只是想引用一下另外一个类B的对象，类B对象的创建不在类A，因此类A也无需管理类B对象的释放，这个时候weak_ptr就应运而生了，使用shared_ptr赋值给一个weak_ptr不会增加强引用计数（strong_count），取而代之的是增加一个弱引用计数（weak_count），而弱引用计数不会影响到指针的生命周期，这就解开了循环引用，上一章最后的代码使用weak_ptr可改造为如下代码。</p>
+<h2 id="刚柔并济：weak-ptr"><a href="#刚柔并济：weak-ptr" class="headerlink" title="刚柔并济：weak_ptr"></a>刚柔并济：weak_ptr</h2><p>正如上一章提到，使用shared_ptr过程中有可能会出现循环引用，关键原因是使用shared_ptr引用一个指针时会导致强引用计数+1，从此该指针的生命周期就会取决于该shared_ptr的生命周期，然而，有些情况我们一个类A里面只是想引用一下另外一个类B的对象，类B对象的创建不在类A，因此类A也无需管理类B对象的释放，这个时候weak_ptr就应运而生了，使用shared_ptr赋值给一个weak_ptr不会增加强引用计数（strong_count），取而代之的是增加一个弱引用计数（weak_count），而弱引用计数不会影响到指针的生命周期，这就解开了循环引用，上一章最后的代码使用weak_ptr可改造为如下代码。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">class A &#123;</span><br><span class="line">public:</span><br><span class="line">    shared_ptr&lt;B&gt; b;</span><br><span class="line">&#125;;</span><br><span class="line">class B &#123;</span><br><span class="line">public:</span><br><span class="line">    weak_ptr&lt;A&gt; a;</span><br><span class="line">&#125;;</span><br><span class="line">int main(int argc, const char * argv[]) &#123;</span><br><span class="line">    shared_ptr&lt;A&gt; spa = make_shared&lt;A&gt;();</span><br><span class="line">    shared_ptr&lt;B&gt; spb = make_shared&lt;B&gt;();</span><br><span class="line">    spa-&gt;b = spb; //spb强引用计数为2，弱引用计数为1</span><br><span class="line">    spb-&gt;a = spa; //spa强引用计数为1，弱引用计数为2</span><br><span class="line">    return 0; </span><br><span class="line">&#125; //main函数退出后，spa先释放，spb再释放，循环解开了</span><br></pre></td></tr></table></figure>
 
 <p>使用weak_ptr也有需要注意的点，因为既然weak_ptr不负责裸指针的生命周期，那么weak_ptr也无法直接操作裸指针，我们需要先转化为shared_ptr，这就和OC的Strong-Weak Dance有点像了，具体操作如下：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">shared_ptr&lt;int&gt; spa = make_shared&lt;int&gt;(10);</span><br><span class="line">weak_ptr&lt;int&gt; spb = spa; //weak_ptr无法直接使用裸指针创建</span><br><span class="line">if (!spb.expired()) &#123; //weak_ptr最好判断是否过期，使用expired或use_count方法，前者更快</span><br><span class="line">	*spb.lock() += 10; //调用weak_ptr转化为shared_ptr后再操作裸指针</span><br><span class="line">&#125;</span><br><span class="line">cout &lt;&lt; *spa &lt;&lt; endl; //20</span><br></pre></td></tr></table></figure>
 
-<h1 id="智能指针原理"><a href="#智能指针原理" class="headerlink" title="智能指针原理"></a>智能指针原理</h1><p>看到这里，智能指针的用法基本介绍完了，后面笔者来粗浅地分析一下为什么智能指针可以有效帮我们管理裸指针的生命周期。</p>
-<h2 id="使用栈对象管理堆对象"><a href="#使用栈对象管理堆对象" class="headerlink" title="使用栈对象管理堆对象"></a>使用栈对象管理堆对象</h2><p>在C++中，内存会分为三部分，堆、栈和静态存储区，静态存储区会存放全局变量和静态变量，在程序加载时就初始化，而堆是由程序员自行分配，自行释放的，例如我们使用裸指针分配的内存；而最后栈是系统帮我们分配的，所以也会帮我们自动回收。因此，智能指针就是利用这一性质，通过一个栈上的对象（shared_ptr或unique_ptr）来管理一个堆上的对象（裸指针），在shared_ptr或unique_ptr的析构函数中判断当前裸指针的引用计数情况来决定是否释放裸指针。</p>
-<h2 id="shared-ptr引用计数的原理"><a href="#shared-ptr引用计数的原理" class="headerlink" title="shared_ptr引用计数的原理"></a>shared_ptr引用计数的原理</h2><p>一开始笔者以为引用计数是放在shared_ptr这个模板类中，但是细想了一下，如果这样将shared_ptr赋值给另一个shared_ptr时，是怎么做到两个shared_ptr的引用计数同时加1呢，让等号两边的shared_ptr中的引用计数同时加1？不对，如果还有第二个shared_ptr再赋值给第三个shared_ptr那怎么办呢？或许通过下面的类图便清楚个中奥秘。</p>
+<h2 id="智能指针原理"><a href="#智能指针原理" class="headerlink" title="智能指针原理"></a>智能指针原理</h2><p>看到这里，智能指针的用法基本介绍完了，后面笔者来粗浅地分析一下为什么智能指针可以有效帮我们管理裸指针的生命周期。</p>
+<h3 id="使用栈对象管理堆对象"><a href="#使用栈对象管理堆对象" class="headerlink" title="使用栈对象管理堆对象"></a>使用栈对象管理堆对象</h3><p>在C++中，内存会分为三部分，堆、栈和静态存储区，静态存储区会存放全局变量和静态变量，在程序加载时就初始化，而堆是由程序员自行分配，自行释放的，例如我们使用裸指针分配的内存；而最后栈是系统帮我们分配的，所以也会帮我们自动回收。因此，智能指针就是利用这一性质，通过一个栈上的对象（shared_ptr或unique_ptr）来管理一个堆上的对象（裸指针），在shared_ptr或unique_ptr的析构函数中判断当前裸指针的引用计数情况来决定是否释放裸指针。</p>
+<h3 id="shared-ptr引用计数的原理"><a href="#shared-ptr引用计数的原理" class="headerlink" title="shared_ptr引用计数的原理"></a>shared_ptr引用计数的原理</h3><p>一开始笔者以为引用计数是放在shared_ptr这个模板类中，但是细想了一下，如果这样将shared_ptr赋值给另一个shared_ptr时，是怎么做到两个shared_ptr的引用计数同时加1呢，让等号两边的shared_ptr中的引用计数同时加1？不对，如果还有第二个shared_ptr再赋值给第三个shared_ptr那怎么办呢？或许通过下面的类图便清楚个中奥秘。</p>
 <p><img src="https://ask.qcloudimg.com/draft/1082555/tv4laz8txd.png" alt="boost中shared_ptr与weak_ptr类图"></p>
 <p>我们重点关注shared_ptr<t>的类图，它就是我们可以直接操作的类，这里面包含裸指针T*，还有一个shared_count的对象，而shared_count对象还不是最终的引用计数，它只是包含了一个指向sp_counted_base的指针，这应该就是真正存放引用计数的地方，包括强应用计数和弱引用计数，而且shared_count中包含的是sp_counted_base的指针，不是对象，这也就意味着假如<strong><strong><code>shared_ptr&lt;T&gt; a = b</code></strong></strong>，那么a和b底层pi_指针指向的是同一个sp_counted_base对象，这就很容易做到多个shared_ptr的引用计数永远保持一致了。</t></p>
-<h1 id="多线程安全"><a href="#多线程安全" class="headerlink" title="多线程安全"></a>多线程安全</h1><p>本章所说的线程安全有两种情况：</p>
-<h2 id="多个线程操作多个不同的shared-ptr对象"><a href="#多个线程操作多个不同的shared-ptr对象" class="headerlink" title="多个线程操作多个不同的shared_ptr对象"></a>多个线程操作多个不同的shared_ptr对象</h2><p>C++11中声明了shared_ptr的计数操作具有原子性，不管是赋值导致计数增加还是释放导致计数减少，都是原子性的，这个可以参考sp_counted_base的源码，因此，基于这个特性，假如有多个shared_ptr共同管理一个裸指针，那么多个线程分别通过不同的shared_ptr进行操作是线程安全的。</p>
-<h2 id="多个线程操作同一个shared-ptr对象"><a href="#多个线程操作同一个shared-ptr对象" class="headerlink" title="多个线程操作同一个shared_ptr对象"></a>多个线程操作同一个shared_ptr对象</h2><p>同样的道理，既然C++11只负责sp_counted_base的原子性，那么shared_ptr本身就没有保证线程安全了，加入两个线程同时访问同一个shared_ptr对象，一个进行释放（reset），另一个读取裸指针的值，那么最后的结果就不确定了，很有可能发生野指针访问crash。</p>
+<h2 id="多线程安全"><a href="#多线程安全" class="headerlink" title="多线程安全"></a>多线程安全</h2><p>本章所说的线程安全有两种情况：</p>
+<h3 id="多个线程操作多个不同的shared-ptr对象"><a href="#多个线程操作多个不同的shared-ptr对象" class="headerlink" title="多个线程操作多个不同的shared_ptr对象"></a>多个线程操作多个不同的shared_ptr对象</h3><p>C++11中声明了shared_ptr的计数操作具有原子性，不管是赋值导致计数增加还是释放导致计数减少，都是原子性的，这个可以参考sp_counted_base的源码，因此，基于这个特性，假如有多个shared_ptr共同管理一个裸指针，那么多个线程分别通过不同的shared_ptr进行操作是线程安全的。</p>
+<h3 id="多个线程操作同一个shared-ptr对象"><a href="#多个线程操作同一个shared-ptr对象" class="headerlink" title="多个线程操作同一个shared_ptr对象"></a>多个线程操作同一个shared_ptr对象</h3><p>同样的道理，既然C++11只负责sp_counted_base的原子性，那么shared_ptr本身就没有保证线程安全了，加入两个线程同时访问同一个shared_ptr对象，一个进行释放（reset），另一个读取裸指针的值，那么最后的结果就不确定了，很有可能发生野指针访问crash。</p>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/07/25/初探C-11智能指针/" data-id="cjyi4eelc00009ctjk16099gn" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2019/07/25/初探C-11智能指针/" data-id="cjyi4g70t0000ertjbggyfxwz" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/C-11-智能指针-线程安全-引用计数/">C++11 智能指针 线程安全 引用计数</a></li></ul>
@@ -154,6 +155,16 @@
   </div>
   
     
+<nav id="article-nav">
+  
+  
+    <a href="/2019/07/19/hello-world/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">Hello World</div>
+    </a>
+  
+</nav>
+
   
 </article>
 
@@ -201,6 +212,10 @@
         
           <li>
             <a href="/2019/07/25/初探C-11智能指针/">初探C++11智能指针</a>
+          </li>
+        
+          <li>
+            <a href="/2019/07/19/hello-world/">Hello World</a>
           </li>
         
       </ul>
