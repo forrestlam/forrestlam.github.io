@@ -5,15 +5,22 @@
   
 
   
-  <title>Hexo</title>
+  <title>初探C++11智能指针 | Hexo</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta property="og:type" content="website">
-<meta property="og:title" content="Hexo">
-<meta property="og:url" content="http://yoursite.com/index.html">
+  <meta name="description" content="智能指针的由来在远古时代，C++发明了指针这把双刃剑，既可以让程序员精确地控制堆上每一块内存，也让程序更容易发生crash，大大增加了使用指针的技术门槛。因此，从C++98开始便推出了auto_ptr，对裸指针进行封装，让程序员无需手动释放指针指向的内存区域，在auto_ptr生命周期结束时自动释放，然而，由于auto_ptr在转移指针所有权后会产生野指针，导致程序运行时crash，如下面示例代码">
+<meta name="keywords" content="C++11 智能指针 线程安全 引用计数">
+<meta property="og:type" content="article">
+<meta property="og:title" content="初探C++11智能指针">
+<meta property="og:url" content="http://yoursite.com/2019/07/25/初探C-11智能指针/index.html">
 <meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="智能指针的由来在远古时代，C++发明了指针这把双刃剑，既可以让程序员精确地控制堆上每一块内存，也让程序更容易发生crash，大大增加了使用指针的技术门槛。因此，从C++98开始便推出了auto_ptr，对裸指针进行封装，让程序员无需手动释放指针指向的内存区域，在auto_ptr生命周期结束时自动释放，然而，由于auto_ptr在转移指针所有权后会产生野指针，导致程序运行时crash，如下面示例代码">
 <meta property="og:locale" content="default">
+<meta property="og:image" content="https://ask.qcloudimg.com/draft/1082555/tv4laz8txd.png">
+<meta property="og:updated_time" content="2019-07-25T03:30:23.041Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Hexo">
+<meta name="twitter:title" content="初探C++11智能指针">
+<meta name="twitter:description" content="智能指针的由来在远古时代，C++发明了指针这把双刃剑，既可以让程序员精确地控制堆上每一块内存，也让程序更容易发生crash，大大增加了使用指针的技术门槛。因此，从C++98开始便推出了auto_ptr，对裸指针进行封装，让程序员无需手动释放指针指向的内存区域，在auto_ptr生命周期结束时自动释放，然而，由于auto_ptr在转移指针所有权后会产生野指针，导致程序运行时crash，如下面示例代码">
+<meta name="twitter:image" content="https://ask.qcloudimg.com/draft/1082555/tv4laz8txd.png">
   
     <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
   
@@ -60,9 +67,7 @@
   </div>
 </header>
       <div class="outer">
-        <section id="main">
-  
-    <article id="post-初探C-11智能指针" class="article article-type-post" itemscope itemprop="blogPost">
+        <section id="main"><article id="post-初探C-11智能指针" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2019/07/25/初探C-11智能指针/" class="article-date">
   <time datetime="2019-07-25T03:28:06.000Z" itemprop="datePublished">2019-07-25</time>
@@ -75,8 +80,8 @@
       <header class="article-header">
         
   
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/07/25/初探C-11智能指针/">初探C++11智能指针</a>
+    <h1 class="article-title" itemprop="name">
+      初探C++11智能指针
     </h1>
   
 
@@ -148,11 +153,9 @@
     </footer>
   </div>
   
-</article>
-
-
+    
   
-
+</article>
 
 </section>
         
