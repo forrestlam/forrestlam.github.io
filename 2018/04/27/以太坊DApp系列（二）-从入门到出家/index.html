@@ -1,0 +1,592 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Head tag -->
+<head><meta name="generator" content="Hexo 3.9.0">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="google-site-verification" content="xBT4GhYoi5qRD5tr338pgPM5OWHHIDR6mNg1a3euekI">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="一位iOS开发者的日常发牢骚">
+    <meta name="keyword" content="iOS OpenGL">
+    <link rel="shortcut icon" href="/img/linker_avatar.jpg">
+    <!-- Place this tag in your head or just before your close body tag. -->
+    <script async defer src="https://buttons.github.io/buttons.js"></script>
+    <title>
+        
+          以太坊DApp系列（二）---从入门到出家 - Forrestlam | iOS开发
+        
+    </title>
+
+    <link rel="canonical" href="http://forrestlam.github.io/2018/04/27/以太坊DApp系列（二）-从入门到出家/">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    <!-- Custom CSS --> 
+    <link rel="stylesheet" href="/css/beantech.min.css">
+    
+    <!-- Pygments Highlight CSS -->
+    <link rel="stylesheet" href="/css/highlight.css">
+
+    <link rel="stylesheet" href="/css/widget.css">
+
+    <link rel="stylesheet" href="/css/rocket.css">
+
+    <link rel="stylesheet" href="/css/signature.css">
+
+    <link rel="stylesheet" href="/css/toc.css">
+
+    <!-- Custom Fonts -->
+    <!-- <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css"> -->
+    <!-- Hux change font-awesome CDN to qiniu -->
+    <link href="https://cdn.staticfile.org/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+
+    <!-- Hux Delete, sad but pending in China
+    <link href='http://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/
+    css'>
+    -->
+
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <!-- ga & ba script hoook -->
+    <script></script>
+</head>
+
+
+<!-- hack iOS CSS :active style -->
+<body ontouchstart="">
+	<!-- Modified by Yu-Hsuan Yen -->
+<!-- Post Header -->
+<style type="text/css">
+    header.intro-header{
+        
+            background-image: url('ethereum.jpg')
+            /*post*/
+        
+    }
+    
+    #signature{
+        background-image: url('/img/signature/ForrestLamSign-white.png');
+    }
+    
+</style>
+
+<header class="intro-header" >
+    <!-- Signature -->
+    <div id="signature">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                
+                    <div class="post-heading">
+                        <div class="tags">
+                            
+                              <a class="tag" href="/tags/#区块链" title="区块链">区块链</a>
+                            
+                              <a class="tag" href="/tags/#以太坊" title="以太坊">以太坊</a>
+                            
+                              <a class="tag" href="/tags/#智能合约" title="智能合约">智能合约</a>
+                            
+                              <a class="tag" href="/tags/#Solidity" title="Solidity">Solidity</a>
+                            
+                        </div>
+                        <h1>以太坊DApp系列（二）---从入门到出家</h1>
+                        <h2 class="subheading">这次我们玩真的</h2>
+                        <span class="meta">
+                            Posted by Forrest Lam on
+                            2018-04-27
+                        </span>
+                    </div>
+                
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+	
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">Forrest Lam</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <!-- Known Issue, found by Hux:
+            <nav>'s height woule be hold on by its content.
+            so, when navbar scale out, the <nav> will cover tags.
+            also mask any touch event of tags, unfortunately.
+        -->
+        <div id="huxblog_navbar">
+            <div class="navbar-collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="/">Home</a>
+                    </li>
+
+                    
+
+                        
+                    
+
+                        
+                        <li>
+                            <a href="/about/">About</a>
+                        </li>
+                        
+                    
+
+                        
+                        <li>
+                            <a href="/tags/">Tags</a>
+                        </li>
+                        
+                    
+
+                        
+                        <li>
+                            <a href="/archive/">Archives</a>
+                        </li>
+                        
+                    
+                    
+                </ul>
+            </div>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+<script>
+    // Drop Bootstarp low-performance Navbar
+    // Use customize navbar with high-quality material design animation
+    // in high-perf jank-free CSS3 implementation
+    var $body   = document.body;
+    var $toggle = document.querySelector('.navbar-toggle');
+    var $navbar = document.querySelector('#huxblog_navbar');
+    var $collapse = document.querySelector('.navbar-collapse');
+
+    $toggle.addEventListener('click', handleMagic)
+    function handleMagic(e){
+        if ($navbar.className.indexOf('in') > 0) {
+        // CLOSE
+            $navbar.className = " ";
+            // wait until animation end.
+            setTimeout(function(){
+                // prevent frequently toggle
+                if($navbar.className.indexOf('in') < 0) {
+                    $collapse.style.height = "0px"
+                }
+            },400)
+        }else{
+        // OPEN
+            $collapse.style.height = "auto"
+            $navbar.className += " in";
+        }
+    }
+</script>
+
+
+    <!-- Main Content -->
+    <!-- Modify by Yu-Hsuan Yen -->
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+
+            <!-- Post Container -->
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                post-container">
+
+                <p>以太坊自2013年V神提出后，被无数人赋予美好的愿景，甚至被称为区块链2.0，其代币发行量更是达到了全球第二，仅次于比特币，而其带来的智能合约概念颠覆了人们对区块链的理解，让区块链不仅仅是个账本，更像一个操作系统，赋予了每个节点“智能”。经过差不多半年来断断续续的学习、理解和沉淀，笔者今天想揭开以太坊DApp神秘的面纱，看看以太坊是猴还是猿。</p>
+<h3 id="DApp介绍"><a href="#DApp介绍" class="headerlink" title="DApp介绍"></a>DApp介绍</h3><p><strong>DApp</strong>（decentralized applications）,中文名是去中心化应用，由一系列智能合约组成，而智能合约可简单理解为代码和数据的集合，运行于以太坊各个节点上，更详细的介绍可参考笔者第一篇文章<a href="/2018/01/24/以太坊DApp开发初探/">以太坊DApp开发初探</a> ，这里先简单介绍一下相关名词。</p>
+<ul>
+<li><strong>Solidity</strong>：智能合约开发语言，语法类似于Javascript，本文智能合约均使用Solidity。</li>
+<li><strong>Solc</strong>：智能合约编译器，将.sol文件编译为字节码，类似于.class文件。</li>
+<li><strong>EVM</strong>：运行智能合约的虚拟机，部署于各个节点上，类似于JVM。</li>
+<li><strong>Gas</strong>：部署和执行智能合约代码所需要的花费，可以换算以太币，但换算关系不是固定的，因为以太币价格波动较大，避免手续费过于昂贵，以太坊创始人构造出Gas来解耦市场波动和计算开销，ETH价格变高，Gas汇率就会降低，基本能保证每一次计算开销消耗的法币是固定的，最终一笔交易的开销 = Gas Limit * Gas Price，如果交易完成还有剩余的Gas，会自动返回到交易发起者账户上，但如果Gas不足时，会报出out-of-gas的错误，回滚这笔交易所做过的修改。</li>
+<li><strong>Remix</strong>：编写智能合约的Web IDE，以太坊官方推荐。</li>
+<li><strong>Web3.js</strong>：以太坊提供访问以太坊节点的接口SDK。</li>
+<li><strong>MetaMask</strong>：一款强大的chrome插件，提供网页访问以太坊节点的Web3数据源，下载地址：<a href="https://chrome.google.com/webstore/detail/metamask/nkbihfbeogaeaoehlefnkodbefgpgknn" target="_blank" rel="noopener">https://chrome.google.com/webstore/detail/metamask/nkbihfbeogaeaoehlefnkodbefgpgknn</a></li>
+</ul>
+<h3 id="DApp开发环境"><a href="#DApp开发环境" class="headerlink" title="DApp开发环境"></a>DApp开发环境</h3><p>DApp的开发和运行方式现在可以说是五花八门，笔者整理出以下几种供大家参考使用。</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>Remix</th>
+<th>TestRPC</th>
+<th>Private Ethereum</th>
+<th>Public TestNet</th>
+<th>Public Ethereum</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Access Method</td>
+<td>Remix</td>
+<td>Node console and web3</td>
+<td>Node console and web3</td>
+<td>Wallet and web3</td>
+<td>Wallet and web3</td>
+</tr>
+<tr>
+<td>Ethereum Blockchain</td>
+<td>Javascript VM inside Remix</td>
+<td>TestRPC (memory)</td>
+<td>Private Ethereum Blockchain (disk)</td>
+<td>Public testnet Ethereum Blockchain</td>
+<td>Public Ethereum Blockchain</td>
+</tr>
+</tbody></table>
+<ol>
+<li>Remix，这是一个强大的IDE环境，不仅可以支持Solidity语法高亮和提示，还可以部署合约，调用和调试合约，你甚至可以不必设置区块链数据源，因为其内嵌了一个模拟区块链的虚拟机叫JavaScript VM。</li>
+<li>TestRPC，这也是开发智能合约的一个利器，虽然名字起得有点随意，但安装和运行方式非常简单，开发者可以通过npm安装然后输入testrpc即可运行，这个运行环境与Remix有点类似，也是在内存中模拟出一个区块链平台，而且TestRPC运行时自动为我们创建10个账户，方便调试，而访问方式我们可以通过nodejs命令行或者web3.js接口访问。</li>
+<li>以太坊私链，也就是搭建属于自己的区块链，最常见的方式就是通过Geth（Go-Ethereum）搭建了，虽然配置起来比前两个麻烦很多，但他可以算是比较真实的区块链平台了，唯一区别就是不需要挖矿，也就是不需要共识，Geth搭建私链时，我们需要配置创世块、bootnode、启动节点、挖矿等操作，这里不详细赘述，读者可以查阅更多的资料。</li>
+<li>测试环境中的公链，一些组织为了让开发者更方便的开发DApp，搭建了自己的以太坊平台并对外开放，这些测试平台的以太币可以免费获取，但每个账户获取的数量有限，不过也足以我们用来测试了，笔者在下文的实践中用的也是这种方案。而测试平台有哪些呢，在我们安装了MetaMask插件以后，可以在里面找到，如下图所示。<br><img src="1524321280_40_w568_h744.png" alt></li>
+<li>以太坊，最后的环境肯定是以太坊了，不过我们在上线前一定要做好测试，因为区块链具有不可篡改性，我们的DApp在上线后出bug可是无法修复的，只能通过发布一个新的DApp，然后通知你的用户以后使用新地址，所以我们在设计合约时应当设置有无效标志位，尽早地告知调用者该合约已经废弃。</li>
+</ol>
+<h3 id="DApp原理"><a href="#DApp原理" class="headerlink" title="DApp原理"></a>DApp原理</h3><p>一个DApp被调用之前需要先部署到以太坊上，不管是私链，公链还是联盟链。故本章节分为两部分，DApp部署原理和调用原理。</p>
+<h4 id="部署"><a href="#部署" class="headerlink" title="部署"></a>部署</h4><p>一个DApp由多个智能合约组成，部署一个DApp也就是同时部署多个智能合约，这里讲述一下部署一个智能合约的流程，如下图所示。<br><img src="1524317412_40_w844_h515.png" alt></p>
+<ol>
+<li>将编写好的Solidity智能合约通过RPC调用以太坊钱包或Web3.js等工具。</li>
+<li>Web3.js发送合约源码到部署在以太坊节点的Solc编译器。</li>
+<li>编译器返回合约字节码。</li>
+<li>发送合约字节码和初始化参数到以太坊节点。</li>
+<li>以太坊节点上EVM验证完成后，部署到全网的所有节点，完成后返回合约地址和应用二进制接口(ABI)。</li>
+</ol>
+<p>笔者这里推荐使用Remix进行部署，因为Remix不仅可以连接浏览器内嵌的以太坊VM，还可以和MetaMask联动，使用MetaMask当前所连的以太坊网络，而且Remix还可以调试部署好的合约，十分方便。在Remix上部署十分简单，选择部署的以太坊网络和填好合约初始化参数后，点击create按钮即可。如果我们选的是MetaMask当前的以太坊网络，则会跳转交易界面，因为部署合约本质上也是一笔交易，我们需要付交易手续费，如下图所示。<br><img src="1524471056_1_w720_h1240.png" alt><br>部署后的合约其实外部还不能调用，还需要我们上传源代码进行验证，不然别人不可能在不清楚源码情况下向合约发起交易，向你转账，如下所示。<br><img src="1524729677_93_w2344_h2534.png" alt></p>
+<h4 id="调用"><a href="#调用" class="headerlink" title="调用"></a>调用</h4><p>部署好的合约我们就可以调用了，根据调用方式的不同，本文分为前端调用和后端调用。<br>前端调用相对来说简单一点，因为有MetaMask这个强大的插件，我们不必操心以太坊数据源，直接调用<code>web3.currentProvider</code>即可，下图展示了前端调用合约的一般流程，由于前端连接的Web3 Provider是与特定的以太坊节点相连，前端不需要管方法的签名，只需无脑调用合约中的方法即可。<br><img src="1524317643_82_w491_h611.png" alt></p>
+<p>至于后台调用就麻烦一点了，由于后台没有MetaMask这么方便的工具可调用，因此要是调用公链上的智能合约，只能使用特定账户的私钥签名方法后，并且以该账户的身份调用合约，流程如下图所示。<br><img src="1524317829_38_w538_h399.png" alt></p>
+<p>以太坊Web3.js提供调用合约的方法一共有四种：</p>
+<ul>
+<li><p>call: 这是最简单的调用方式，适用于调用只读的方法，也就是调用过程不会修改区块链上的数据，因为它只读取本地数据即可，因此不会消耗gas，而且可以立刻获得返回值，适用于前端调用，具体例子如下。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//合约声明</span></span><br><span class="line">contract test &#123; </span><br><span class="line">	<span class="function"><span class="keyword">function</span> <span class="title">multiply</span>(<span class="params">uint a</span>) <span class="title">returns</span>(<span class="params">uint d</span>) </span>&#123; </span><br><span class="line">		<span class="keyword">return</span> a * <span class="number">7</span>; </span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//合约调用</span></span><br><span class="line"><span class="keyword">var</span> Multiply7 = eth.contract(contract.info.abiDefinition);</span><br><span class="line"><span class="keyword">var</span> myMultiply7 = Multiply7.at(address);</span><br><span class="line">myMultiply7.multiply.call(<span class="number">3</span>)</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>sendTransaction: 可调用读或写方法，调用过程会创建一个交易，调用之后会返回一个交易hash值，它会广播到网络，等待矿工打包, 它会消耗gas，而且该调用不能立刻获得返回值，只能从event log中获取，也是适用于前端调用，代码如下。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">wheelOfFortune.makeBet.sendTransaction(num - <span class="number">1</span>, betCount, tips, &#123; <span class="attr">from</span>: web3.eth.accounts[<span class="number">0</span>], <span class="attr">value</span>: betUnit * betCount + tips &#125;).then(<span class="function"><span class="keyword">function</span> (<span class="params">result</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (result.logs.length &gt; <span class="number">0</span>) &#123;</span><br><span class="line">        <span class="keyword">var</span> eventobj = result.logs[<span class="number">0</span>].args;</span><br><span class="line">        $.ajax(&#123;</span><br><span class="line">            url: <span class="string">'/Wheel/makeBet/'</span> + eventobj.pieceIdx + <span class="string">'/'</span> + betCount + <span class="string">'/'</span> + tips + <span class="string">'/'</span> + web3.eth.accounts[<span class="number">0</span>],</span><br><span class="line">            success: <span class="function"><span class="keyword">function</span> (<span class="params">data</span>) </span>&#123;</span><br><span class="line">                <span class="keyword">var</span> nextRound = <span class="built_in">JSON</span>.parse(data);</span><br><span class="line">                $(<span class="string">"#currentTotal"</span>).text(nextRound.betPool.toLocaleString());</span><br><span class="line">                playersNumberOfPiece = nextRound.playersNumberOfPiece;</span><br><span class="line">                alert(<span class="string">'下注成功'</span>);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>直接调用:  这是一种特殊调用，可以说是前两种调用的结合，因为当合约方法有<code>constant</code>修饰时，直接调用会等同于<code>call</code>，否则等同于<code>sendTransaction</code>。</p>
+</li>
+<li><p>sendRawTransaction: 前两种方法都不需要调用者提供交易发起者的私钥进行方法签名，因为MetaMask或本地以太坊节点提供了，但是当我们没有MetaMask时调用公链合约，我们只能调用<code>sendRawTransaction</code>使用指定账户的私钥签名方法后才能调用合约，值得注意的是，该方法我们无法获得返回值，即使在event log中也拿不到，只能在得到transaction的hash后再读取区块链信息才可以，一般在后台调用方法时用到，代码如下。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> winIdx = (<span class="built_in">Math</span>.random() * wheel.config.pieceCount) &gt;&gt; <span class="number">0</span>;</span><br><span class="line"><span class="comment">// 后台调用infura部署的合约必须用sendRawTransaction</span></span><br><span class="line"><span class="keyword">var</span> coder = <span class="built_in">require</span>(<span class="string">'web3/lib/solidity/coder'</span>);</span><br><span class="line"><span class="keyword">var</span> CryptoJS = <span class="built_in">require</span>(<span class="string">'crypto-js'</span>);</span><br><span class="line"><span class="keyword">var</span> Tx = <span class="built_in">require</span>(<span class="string">'ethereumjs-tx'</span>);</span><br><span class="line"><span class="keyword">var</span> privateKey = <span class="keyword">new</span> Buffer(<span class="string">"71112e795325d5cbf14d665091ce4626f26c8342b8038f1adcdfff26be04a220"</span>, <span class="string">'hex'</span>);</span><br><span class="line"><span class="keyword">var</span> functionName = <span class="string">'finishRound'</span>;</span><br><span class="line"><span class="keyword">var</span> types = [<span class="string">'uint'</span>];</span><br><span class="line"><span class="keyword">var</span> args = [winIdx];</span><br><span class="line"><span class="keyword">var</span> fullName = functionName + <span class="string">'('</span> + types.join() + <span class="string">')'</span>;</span><br><span class="line"><span class="keyword">var</span> signature = CryptoJS.SHA3(fullName, &#123; <span class="attr">outputLength</span>: <span class="number">256</span> &#125;).toString(CryptoJS.enc.Hex).slice(<span class="number">0</span>, <span class="number">8</span>);</span><br><span class="line"><span class="keyword">var</span> dataHex = signature + coder.encodeParams(types, args);</span><br><span class="line"><span class="keyword">var</span> data = <span class="string">'0x'</span> + dataHex;</span><br><span class="line"><span class="keyword">var</span> account = <span class="string">"0x4BEB9EA54fc912B619D5C682BA1cB3524bc80955"</span>;</span><br><span class="line"><span class="keyword">var</span> nonce = web3.toHex(web3.eth.getTransactionCount(account));</span><br><span class="line"><span class="keyword">var</span> gasPrice = web3.toHex(web3.eth.gasPrice);</span><br><span class="line"><span class="keyword">var</span> gasLimitHex = web3.toHex(<span class="number">3000000</span>);</span><br><span class="line"><span class="keyword">var</span> rawTx = &#123; <span class="string">'nonce'</span>: nonce, <span class="string">'gasPrice'</span>: gasPrice, <span class="string">'gasLimit'</span>: gasLimitHex, <span class="string">'from'</span>: account, <span class="string">'to'</span>: contractAddress, <span class="string">'data'</span>: data &#125;</span><br><span class="line"><span class="keyword">var</span> tx = <span class="keyword">new</span> Tx(rawTx)</span><br><span class="line">tx.sign(privateKey)</span><br><span class="line"><span class="keyword">var</span> serializedTx = <span class="string">'0x'</span> + tx.serialize().toString(<span class="string">'hex'</span>)</span><br><span class="line">web3.eth.sendRawTransaction(serializedTx, <span class="function"><span class="keyword">function</span> (<span class="params">err, txHash</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (!err) &#123;</span><br><span class="line">        <span class="built_in">console</span>.log(<span class="built_in">JSON</span>.stringify(&#123; <span class="string">"transactionHash"</span>: txHash &#125;));</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="built_in">console</span>.log(<span class="string">"finish round error "</span> + err);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<p>调用时需要注意的几点：</p>
+<ol>
+<li>当调用者给予Gas不足时，EVM会报出<code>out of gas</code>的错误，这时候会回滚本地交易所做过的所有修改，好在以太坊还提供了<code>estimategas</code>方法，可以让我们在调用之前预估交易所需的Gas，因为Solc编译器会算出每一句代码的价格，不过有时会不准确，特别是出现死循环或者违反了修饰方法的限制条件时。</li>
+<li>调用频率不能过快，一方面所有调用方法都是异步的，返回时间可能会较长，另一方面有可能第一次调用的transaction还没被挖到区块中，下一次调用就来了，而且两次调用的hash可能是一样的，所以就会报<code>replacement transaction underpriced</code>错误。</li>
+<li>当我们调用了不存在的方法时，EVM会自动调用合约中的<code>Fallback</code>方法作为兜底，而且会将Gas全耗完，如果没有定义<code>Fallback</code>方法，才会报错回滚。</li>
+</ol>
+<h3 id="DApp完整开发实践"><a href="#DApp完整开发实践" class="headerlink" title="DApp完整开发实践"></a>DApp完整开发实践</h3><p>在目前DApp应用市场上，目前主要有四类应用：去中心化交易所、集换类游戏、博彩类游戏和其他，比例如下图所示，其中集换式游戏以以太猫为首，这类游戏大部分以发行Token为噱头，因此本章节将讲述两种游戏类的DApp是如何开发的。<br><img src="1524647262_81_w382_h430.jpeg" alt></p>
+<h4 id="实践1-基于以太坊发起ICO"><a href="#实践1-基于以太坊发起ICO" class="headerlink" title="实践1. 基于以太坊发起ICO"></a>实践1. 基于以太坊发起ICO</h4><p>在笔者的前一篇介绍以太坊DApp的文章里，不少同事在评论都说到ICO，虽然这在中国是违法的，但技术还是可以学习一下的。其实，在以太坊上发行代币（Token）十分简单，流程就像开发一款DApp，比自己搭建一个新的区块链平台，实现加密、共识、网络问题简单得多。<br>以太坊提供了很多现成的合约，类似于模板，基于这些模板我们可以快速开发一款DApp。其中ERC20是最为常用的模板之一，它规定了发行代币所需要实现的所有方法，如下图所示，我们只需编写一个智能合约继承于ERC20，实现下列方法，部署到以太坊后就完成ICO流程了，当然，你想有人买你的代币，肯定要写一个白皮书啦。<br><img src="1524645563_44_w1826_h876.png" alt></p>
+<ul>
+<li>totalSupply: 代币总发行量</li>
+<li>balanceOf: 某个账户的余额</li>
+<li>transfer: 每个合约都有一些隐藏参数，例如<code>from</code>，指向当前账户，该方法返回从<code>from</code>账户转账<code>_value</code>代币到<code>_to</code>账户能否成功</li>
+<li>transferFrom: 类似于<code>transfer</code>，返回从<code>_from</code>转账<code>_value</code>到<code>_to</code>账户能否成功，但通常是第三方调用，即调用者账户地址既不等于<code>_from</code>，也不等于<code>_to</code></li>
+<li>approve: 当前账户允许是否允许转账<code>_value</code>代币给<code>_spender</code>账户</li>
+<li>allowance: <code>_owner</code>账户最多可以转账多少代币给<code>_spender</code>账户，注意该方法用<code>constant</code>修饰，所以实现代码不允许修改区块链上的数据</li>
+<li>Transfer事件: 在Solidity中，事件的作用类似于日志，<code>Transfer</code>事件应该在<code>transfer</code>和<code>transferFrom</code>方法中被调用</li>
+<li>Approval事件: 该事件应该在<code>approve</code>方法中被调用</li>
+</ul>
+<p>另外值得注意的是，以太猫不是基于ERC20合约，而是ERC71，这合约是在ERC20的基础上，加上了唯一性的特性，因此以太猫游戏中每只猫（Token）都是独一无二的。</p>
+<h4 id="实践2-转盘大富翁"><a href="#实践2-转盘大富翁" class="headerlink" title="实践2. 转盘大富翁"></a>实践2. 转盘大富翁</h4><p>这是笔者开发的第一个比较完整的Demo，一个博彩类游戏，感兴趣的读者可以在<a href="http://forrestlin.cn:8080/client/index.html" title="传送门" target="_blank" rel="noopener">传送门</a>上体验，目前DApp是部署在Ropsten测试网络中，该测试网络的以太币可以免费获得，所以在上面的Demo尽情玩耍，感受以太坊交易的“快”感。想继续深入研究的读者可下载本文的附件，里面包含该Demo所有代码，运行方式就是在项目根目录执行<code>npm start</code>命令。</p>
+<h5 id="玩法"><a href="#玩法" class="headerlink" title="玩法"></a>玩法</h5><p><img src="1524711498_37_w2904_h1616.png" alt><br>首先需要安装<a href="https://chrome.google.com/webstore/detail/metamask/nkbihfbeogaeaoehlefnkodbefgpgknn" title="MetaMask" target="_blank" rel="noopener">MetaMask</a>插件，然后刷新页面，点击某个扇区进行下注，下注之前可以看下页面上的信息，如上图所示，顶部显示了当前的奖金池（即过往未中奖的累计奖金），还有当前每一注的大小，注意这两项的单位都是wei，这是以太坊中最小的单位，与以太币的换算关系是1Ether = 10^18wei。右边显示了上轮的中奖情况，玩家可以通过统计每一轮开奖的扇区来计算开奖的规律（笑）。点击扇区下注时页面会弹出一个输入框输入下的注数，确定后将跳出MetaMask交易界面，如下图所示，由于我们每一注比较小，所以玩家可以下多一点注，不然交易的amount近似于0。当我们点击submit按钮后，交易就发生了，由于区块链同步时间较长，我们每次下注大约需要等几十秒左右才能确认下注成功，最后我们等待倒计时结束后系统将开奖。<br><img src="1524713296_16_w720_h1240.png" alt></p>
+<h5 id="架构"><a href="#架构" class="headerlink" title="架构"></a>架构</h5><p>整个Demo的架构如下：</p>
+<ul>
+<li>前端：JavaScript + MetaMask + Web3.js</li>
+<li>后台：Node.js + Web3.js</li>
+<li>区块链：Ropsten以太坊测试网络</li>
+</ul>
+<p>三者的通信过程如下图所示：<br><img src="1524714256_48_w848_h1080.png" alt><br>0.后台启动轮盘倒计时<br>1.浏览器访问前端页面，向后台获取转盘的配置<br>2.前端页面启动倒计时<br>3.用户在前端页面下注，先请求以太坊节点，得到下注成功的返回再通知后台<br>3.5.后台倒计时时间到，请求以太坊节点，返回当前回合是否成功结束<br>4.前端倒计时也时间到了，向后台请求当前回合的开奖情况，但由于后台开奖结果需要等待以太坊节点的返回，因此这里需要轮询，要么就改成后台主动push到前端</p>
+<p>注意，这里第3步前端下注的时候由于回调时间过长，可能会导致在后台开奖后还没有下注成功，这种情况下DApp应该要回滚这次下注，但这只是个Demo，就不要在意这些细节了。</p>
+<h3 id="DApp-VS-传统App"><a href="#DApp-VS-传统App" class="headerlink" title="DApp VS 传统App"></a>DApp VS 传统App</h3><p>讲到这里，相信读者已经清楚以太坊DApp的完整开发流程了，回顾一下这个流程，对于DApp开发和传统App开发的区别，读者总结出以下几点：</p>
+<ul>
+<li>前端、后台与数据源解耦，在传统App开发过程中，数据源对于前端来说都是不可见的，只有后台才可以增删改查数据源</li>
+<li>调用方式，传统App访问数据源大部分都是靠数据库提供的接口或第三方封装的接口，如JDBC，而DApp中一切访问数据源目前都通过Web3.js，而且还需要考虑手续费和签名问题</li>
+<li>调用频率，上面已经提到，以太坊节点访问速度极慢而且还需要手续费，如果不是必要的访问，尽量放到业务服务器，如上面Demo获取转盘的配置的请求就是请求业务后台而不是以太坊节点</li>
+<li>不存在不确定代码，也就是DApp所有合约的代码都是客观的，所有节点执行，执行多少次都是一样的结果，例如转盘大富翁Demo中，中奖的扇区号码是业务后台随机产生的，而不是合约代码，为什么呢，最直接原因是Solidity不提供这样的方法，而最根本的原因是DApp是分布式执行的，如果每个节点都产生一个随机数，就会导致合约执行的最终结果不一致，也就破坏了账本。除此之外，获取一些主观结果也是不行的，例如获取今天是否下大雨的结果，这个“大”智能合约根本无法定义。</li>
+</ul>
+<h3 id="总结-amp-思考"><a href="#总结-amp-思考" class="headerlink" title="总结&amp;思考"></a>总结&amp;思考</h3><p>目前DApp的开发力度和普及程度还远远不够，在手机App面前如同九牛一毛，即使是去年最火爆的以太猫，平均日活也只有900多，原因笔者认为还是在于门槛太高（需要安装插件，每笔交易时间长，手续费高），希望号称下一代区块链平台的EOS能解决这些根本性问题。<br>本文对于以太坊DApp开发的介绍到此为止了，想继续深入研究的读者可参考下列链接：</p>
+<ul>
+<li><a href="http://www.ethdocs.org/en/latest/" title="以太坊官方文档" target="_blank" rel="noopener">以太坊官方文档</a></li>
+<li><a href="https://solidity.readthedocs.io/en/develop/" title="Solidity官方文档" target="_blank" rel="noopener">Solidity官方文档</a></li>
+<li><a href="https://ethfans.org/?page=1" title="以太坊爱好者" target="_blank" rel="noopener">以太坊爱好者</a></li>
+<li><a href="http://truffleframework.com/docs/getting_started/contracts" title="Truffle" target="_blank" rel="noopener">Truffle</a>：DApp打包工具</li>
+<li><a href="https://github.com/MetaMask/faq/blob/master/DEVELOPERS.md" title="MetaMask" target="_blank" rel="noopener">MetaMask</a>：以太坊电子钱包chrome插件，向前端页面提供数据源</li>
+</ul>
+<p>最后的最后，笔者想抛一个问题，智能合约是否真的智能，真的公平呢？<br>笔者认为至少目前还没达到这个水平，原因刚才已经提到，合约结果的来源，也就是面对需要主观性的仲裁结果的时候，智能合约就无能为力了，这就大大限制了智能合约的使用范围，如果这个结果来自于业务后台（例如刚刚转盘的结果），那就很容易出现暗箱操作，毕竟业务后台的代码一般不会开源。针对这种状态，今年年初以太坊创始人提出了预言机的概念，一个可提供可信任、可验证结果的来源，相当于现实世界中的仲裁法庭，当合约发生冲突时能给出一个人人信服的结果，但这样区块链难以攻破的现状就不复存在了，预言机将成为区块链的短板，希望未来这一问题能够尽快解决，不然DApp实在难以普及。</p>
+<h3 id="附件"><a href="#附件" class="headerlink" title="附件"></a>附件</h3><p><a href="WheelOfFortune.zip">WheelOfFortune.zip</a></p>
+
+                
+
+                <hr>
+                <!-- Pager -->
+                <ul class="pager">
+                    
+                        <li class="previous">
+                            <a href="/2018/08/20/打造第一个自训练模型的Core-ML应用/" data-toggle="tooltip" data-placement="top" title="打造第一个自训练模型的Core ML应用">&larr; Previous Post</a>
+                        </li>
+                    
+                    
+                        <li class="next">
+                            <a href="/2018/01/24/以太坊DApp开发初探/" data-toggle="tooltip" data-placement="top" title="以太坊DApp开发初探">Next Post &rarr;</a>
+                        </li>
+                    
+                </ul>
+
+                <!-- duoshuo Share start -->
+                
+                <!-- 多说 Share end-->
+
+                <!-- 多说评论框 start -->
+                
+                <!-- 多说评论框 end -->
+
+                <!-- disqus comment start -->
+                
+                <!-- disqus comment end -->
+            </div>
+            
+            <!-- Tabe of Content -->
+            <!-- Table of Contents -->
+
+    
+      <aside id="sidebar">
+        <div id="toc" class="toc-article">
+        <strong class="toc-title">Contents</strong>
+        
+          <ol class="toc-nav"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#DApp介绍"><span class="toc-nav-number">1.</span> <span class="toc-nav-text">DApp介绍</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#DApp开发环境"><span class="toc-nav-number">2.</span> <span class="toc-nav-text">DApp开发环境</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#DApp原理"><span class="toc-nav-number">3.</span> <span class="toc-nav-text">DApp原理</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#部署"><span class="toc-nav-number">3.1.</span> <span class="toc-nav-text">部署</span></a></li><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#调用"><span class="toc-nav-number">3.2.</span> <span class="toc-nav-text">调用</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#DApp完整开发实践"><span class="toc-nav-number">4.</span> <span class="toc-nav-text">DApp完整开发实践</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#实践1-基于以太坊发起ICO"><span class="toc-nav-number">4.1.</span> <span class="toc-nav-text">实践1. 基于以太坊发起ICO</span></a></li><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#实践2-转盘大富翁"><span class="toc-nav-number">4.2.</span> <span class="toc-nav-text">实践2. 转盘大富翁</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-5"><a class="toc-nav-link" href="#玩法"><span class="toc-nav-number">4.2.1.</span> <span class="toc-nav-text">玩法</span></a></li><li class="toc-nav-item toc-nav-level-5"><a class="toc-nav-link" href="#架构"><span class="toc-nav-number">4.2.2.</span> <span class="toc-nav-text">架构</span></a></li></ol></li></ol></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#DApp-VS-传统App"><span class="toc-nav-number">5.</span> <span class="toc-nav-text">DApp VS 传统App</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#总结-amp-思考"><span class="toc-nav-number">6.</span> <span class="toc-nav-text">总结&amp;思考</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#附件"><span class="toc-nav-number">7.</span> <span class="toc-nav-text">附件</span></a></li></ol>
+        
+        </div>
+      </aside>
+    
+
+                
+            <!-- Sidebar Container -->
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                sidebar-container">
+
+                <!-- Featured Tags -->
+                
+                <section>
+                    <!-- no hr -->
+                    <h5><a href="/tags/">FEATURED TAGS</a></h5>
+                    <div class="tags">
+                       
+                          <a class="tag" href="/tags/#区块链" title="区块链">区块链</a>
+                        
+                          <a class="tag" href="/tags/#以太坊" title="以太坊">以太坊</a>
+                        
+                          <a class="tag" href="/tags/#智能合约" title="智能合约">智能合约</a>
+                        
+                          <a class="tag" href="/tags/#Solidity" title="Solidity">Solidity</a>
+                        
+                    </div>
+                </section>
+                
+
+                <!-- Friends Blog -->
+                
+                <hr>
+                <h5>FRIENDS</h5>
+                <ul class="list-inline">
+
+                    
+                </ul>
+                
+            </div>
+        </div>
+    </div>
+</article>
+
+
+
+
+
+
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+<!-- anchor-js, Doc:http://bryanbraun.github.io/anchorjs/ -->
+<script>
+    async("https://cdn.bootcss.com/anchor-js/1.1.1/anchor.min.js",function(){
+        anchors.options = {
+          visible: 'hover',
+          placement: 'left',
+          icon: 'ℬ'
+        };
+        anchors.add().remove('.intro-header h1').remove('.subheading').remove('.sidebar-container h5');
+    })
+</script>
+<style>
+    /* place left on bigger screen */
+    @media all and (min-width: 800px) {
+        .anchorjs-link{
+            position: absolute;
+            left: -0.75em;
+            font-size: 1.1em;
+            margin-top : -0.1em;
+        }
+    }
+</style>
+
+
+
+    <!-- Footer -->
+    <!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                
+                
+                
+
+                
+
+                
+
+                
+                    <li>
+                        <a target="_blank"  href="https://github.com/forrestlam">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+
+                </ul>
+                <p class="copyright text-muted">
+                    Copyright &copy; Forrest Lam 2019 
+                </p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+<script src="/js/jquery.min.js"></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="/js/bootstrap.min.js"></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/js/hux-blog.min.js"></script>
+
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+
+<!-- 
+     Because of the native support for backtick-style fenced code blocks 
+     right within the Markdown is landed in Github Pages, 
+     From V1.6, There is no need for Highlight.js, 
+     so Huxblog drops it officially.
+
+     - https://github.com/blog/2100-github-pages-now-faster-and-simpler-with-jekyll-3-0  
+     - https://help.github.com/articles/creating-and-highlighting-code-blocks/    
+-->
+<!--
+    <script>
+        async("http://cdn.bootcss.com/highlight.js/8.6/highlight.min.js", function(){
+            hljs.initHighlightingOnLoad();
+        })
+    </script>
+    <link href="http://cdn.bootcss.com/highlight.js/8.6/styles/github.min.css" rel="stylesheet">
+-->
+
+
+<!-- jquery.tagcloud.js -->
+<script>
+    // only load tagcloud.js in tag.html
+    if($('#tag_cloud').length !== 0){
+        async("http://forrestlam.github.io/js/jquery.tagcloud.js",function(){
+            $.fn.tagcloud.defaults = {
+                //size: {start: 1, end: 1, unit: 'em'},
+                color: {start: '#bbbbee', end: '#0085a1'},
+            };
+            $('#tag_cloud a').tagcloud();
+        })
+    }
+</script>
+
+<!--fastClick.js -->
+<script>
+    async("https://cdn.bootcss.com/fastclick/1.0.6/fastclick.min.js", function(){
+        var $nav = document.querySelector("nav");
+        if($nav) FastClick.attach($nav);
+    })
+</script>
+
+
+<!-- Google Analytics -->
+
+
+
+
+<!-- Baidu Tongji -->
+
+
+
+
+
+
+	<a id="rocket" href="#top" class=""></a>
+	<script type="text/javascript" src="/js/totop.js?v=1.0.0" async=""></script>
+    <script type="text/javascript" src="/js/toc.js?v=1.0.0" async=""></script>
+<!-- Image to hack wechat -->
+<img src="http://forrestlam.github.io/img/icon_wechat.png" width="0" height="0" />
+<!-- Migrate from head to bottom, no longer block render and still work -->
+
+</body>
+
+</html>
