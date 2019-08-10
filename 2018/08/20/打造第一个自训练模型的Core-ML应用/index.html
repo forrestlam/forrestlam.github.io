@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Head tag -->
+<head><meta name="generator" content="Hexo 3.9.0">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="google-site-verification" content="xBT4GhYoi5qRD5tr338pgPM5OWHHIDR6mNg1a3euekI">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="一位iOS开发者的日常发牢骚">
+    <meta name="keyword" content="iOS OpenGL">
+    <link rel="shortcut icon" href="/img/linker_avatar.jpg">
+    <!-- Place this tag in your head or just before your close body tag. -->
+    <script async defer src="https://buttons.github.io/buttons.js"></script>
+    <title>
+        
+          打造第一个自训练模型的Core ML应用 - Forrestlam | iOS开发
+        
+    </title>
+
+    <link rel="canonical" href="http://forrestlam.github.io/2018/08/20/打造第一个自训练模型的Core-ML应用/">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    <!-- Custom CSS --> 
+    <link rel="stylesheet" href="/css/beantech.min.css">
+    
+    <!-- Pygments Highlight CSS -->
+    <link rel="stylesheet" href="/css/highlight.css">
+
+    <link rel="stylesheet" href="/css/widget.css">
+
+    <link rel="stylesheet" href="/css/rocket.css">
+
+    <link rel="stylesheet" href="/css/signature.css">
+
+    <link rel="stylesheet" href="/css/toc.css">
+
+    <!-- Custom Fonts -->
+    <!-- <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css"> -->
+    <!-- Hux change font-awesome CDN to qiniu -->
+    <link href="https://cdn.staticfile.org/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+
+    <!-- Hux Delete, sad but pending in China
+    <link href='http://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/
+    css'>
+    -->
+
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <!-- ga & ba script hoook -->
+    <script></script>
+</head>
+
+
+<!-- hack iOS CSS :active style -->
+<body ontouchstart="">
+	<!-- Modified by Yu-Hsuan Yen -->
+<!-- Post Header -->
+<style type="text/css">
+    header.intro-header{
+        
+            background-image: url('apple.jpg')
+            /*post*/
+        
+    }
+    
+    #signature{
+        background-image: url('/img/signature/ForrestLamSign-white.png');
+    }
+    
+</style>
+
+<header class="intro-header" >
+    <!-- Signature -->
+    <div id="signature">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                
+                    <div class="post-heading">
+                        <div class="tags">
+                            
+                              <a class="tag" href="/tags/#深度学习" title="深度学习">深度学习</a>
+                            
+                              <a class="tag" href="/tags/#iOS" title="iOS">iOS</a>
+                            
+                              <a class="tag" href="/tags/#CoreML" title="CoreML">CoreML</a>
+                            
+                        </div>
+                        <h1>打造第一个自训练模型的Core ML应用</h1>
+                        <h2 class="subheading">苹果爸爸的新玩具</h2>
+                        <span class="meta">
+                            Posted by Forrest Lam on
+                            2018-08-20
+                        </span>
+                    </div>
+                
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+	
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">Forrest Lam</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <!-- Known Issue, found by Hux:
+            <nav>'s height woule be hold on by its content.
+            so, when navbar scale out, the <nav> will cover tags.
+            also mask any touch event of tags, unfortunately.
+        -->
+        <div id="huxblog_navbar">
+            <div class="navbar-collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="/">Home</a>
+                    </li>
+
+                    
+
+                        
+                    
+
+                        
+                        <li>
+                            <a href="/about/">About</a>
+                        </li>
+                        
+                    
+
+                        
+                        <li>
+                            <a href="/tags/">Tags</a>
+                        </li>
+                        
+                    
+
+                        
+                        <li>
+                            <a href="/archive/">Archives</a>
+                        </li>
+                        
+                    
+                    
+                </ul>
+            </div>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+<script>
+    // Drop Bootstarp low-performance Navbar
+    // Use customize navbar with high-quality material design animation
+    // in high-perf jank-free CSS3 implementation
+    var $body   = document.body;
+    var $toggle = document.querySelector('.navbar-toggle');
+    var $navbar = document.querySelector('#huxblog_navbar');
+    var $collapse = document.querySelector('.navbar-collapse');
+
+    $toggle.addEventListener('click', handleMagic)
+    function handleMagic(e){
+        if ($navbar.className.indexOf('in') > 0) {
+        // CLOSE
+            $navbar.className = " ";
+            // wait until animation end.
+            setTimeout(function(){
+                // prevent frequently toggle
+                if($navbar.className.indexOf('in') < 0) {
+                    $collapse.style.height = "0px"
+                }
+            },400)
+        }else{
+        // OPEN
+            $collapse.style.height = "auto"
+            $navbar.className += " in";
+        }
+    }
+</script>
+
+
+    <!-- Main Content -->
+    <!-- Modify by Yu-Hsuan Yen -->
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+
+            <!-- Post Container -->
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                post-container">
+
+                <p>Core ML是iOS11的新特性，赋予iOS App更多AI的能力，例如垃圾短信识别、Siri、人脸识别、场景识别等等，过去集成在iOS系统的AI能力终于通过Core ML开放给第三方开发者了。随后苹果在今年WWDC发布了Create ML，这个苹果自家人工智能模型训练平台，苹果人工智能生态系统正逐渐形成，今天我们就借着一个简单的Core ML应用简单窥探一下。</p>
+<h3 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h3><p>Core ML 是iOS系统中人工智能模型的运行环境，开发者可以将自己训练好的模型转换为mlmodel，然后就可以应用内调用模型进行分类或预测了，目前支持转换的模型有caffe、keras、scikit-learn等。至于Core ML的能耐本文也不详细介绍了，参考苹果自己封装的图像处理分析框架vision和NLP框架就知道了。<br><img src="1534752195_36_w1532_h742.png" alt></p>
+<h3 id="准备工具"><a href="#准备工具" class="headerlink" title="准备工具"></a>准备工具</h3><p>为了简单起见，数据处理和模型的训练本文使用Python编写，以下都是机器学习常用类库，均可通过<code>pip install xxx</code>安装。<br>模型训练工具：scikit-learn<br>数据处理：pandas<br>模型转换工具：linear_model</p>
+<h3 id="生成数据"><a href="#生成数据" class="headerlink" title="生成数据"></a>生成数据</h3><p>由于本文编写的只是一个demo，所以数据是本地随机生成的，生成脚本如下</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> random</span><br><span class="line"><span class="keyword">import</span> pandas <span class="keyword">as</span> pd</span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line">    params_count = <span class="number">4</span></span><br><span class="line">    params = []</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(params_count):</span><br><span class="line">        params.append(random.random())</span><br><span class="line">    df = pd.DataFrame(columns=[<span class="string">'x1'</span>, <span class="string">'x2'</span>, <span class="string">'x3'</span>, <span class="string">'y'</span>])</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">10000</span>):</span><br><span class="line">        X = []</span><br><span class="line">        <span class="keyword">for</span> j <span class="keyword">in</span> range(params_count - <span class="number">1</span>):</span><br><span class="line">            X.append(random.randint(<span class="number">0</span>, <span class="number">100</span>))</span><br><span class="line">        y = sum([X[i] * params[i] <span class="keyword">for</span> i <span class="keyword">in</span> range(params_count - <span class="number">1</span>)])</span><br><span class="line">        y += params[<span class="number">-1</span>]</span><br><span class="line">        line = X</span><br><span class="line">        line.append(y)</span><br><span class="line">        df.loc[i] = line</span><br><span class="line">    df.to_csv(<span class="string">'random_data.txt'</span>, index=<span class="literal">False</span>, sep=<span class="string">','</span>)</span><br><span class="line">    print(<span class="string">'params = %s\n'</span>%(<span class="string">','</span>.join(map(str, params))))</span><br></pre></td></tr></table></figure>
+
+<h3 id="训练模型"><a href="#训练模型" class="headerlink" title="训练模型"></a>训练模型</h3><p>我们将生成的数据分为训练数据和测试数据，对于训练数据，我们用最简单的线性回归模型训练，训练过程中我们用交叉数据验证下模型的准确率，最后保存到文件中，代码如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> sklearn.cross_validation <span class="keyword">import</span> KFold</span><br><span class="line"><span class="keyword">import</span> pandas <span class="keyword">as</span> pd</span><br><span class="line"><span class="keyword">from</span> sklearn <span class="keyword">import</span> linear_model</span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">from</span> sklearn.externals <span class="keyword">import</span> joblib</span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line">    train_data = pd.read_table(<span class="string">'random_train_data.txt'</span>, sep=<span class="string">','</span>)</span><br><span class="line">    X_train = train_data.ix[:, [<span class="number">0</span>, <span class="number">1</span>, <span class="number">2</span>]]</span><br><span class="line">    y_train = train_data[[<span class="string">'y'</span>]]</span><br><span class="line">    kf = KFold(y_train.shape[<span class="number">0</span>], n_folds=<span class="number">5</span>)</span><br><span class="line">    residuals, scores = [], []</span><br><span class="line">    <span class="keyword">for</span> train_index, test_index <span class="keyword">in</span> kf:</span><br><span class="line">        clf = linear_model.LinearRegression()</span><br><span class="line">        clf.fit(X_train.iloc[train_index, :], y_train.iloc[train_index, :])</span><br><span class="line">        residual = np.mean(clf.predict(X_train.iloc[test_index, :]) - y_train.iloc[test_index, :]) ** <span class="number">2</span></span><br><span class="line">        print(<span class="string">'Residual sum of squares = %.2f'</span>%(residual))</span><br><span class="line">        residuals.append(residual)</span><br><span class="line">        score = clf.score(X_train.iloc[test_index, :], y_train.iloc[test_index, :])</span><br><span class="line">        print(<span class="string">'Score = %.2f'</span>%(score))</span><br><span class="line">        scores.append(score)</span><br><span class="line">        print(<span class="string">'\n'</span>)</span><br><span class="line">    print(<span class="string">'Mean Residual sum of squares = %.2f'</span> % np.mean(residuals))</span><br><span class="line">    print(<span class="string">'Mean score = %.2f'</span> % np.mean(scores))</span><br><span class="line">    clf = linear_model.LinearRegression()</span><br><span class="line">    clf.fit(X_train, train_data[<span class="string">'y'</span>])</span><br><span class="line">    joblib.dump(clf, <span class="string">'linear_regression.pkl'</span>)</span><br></pre></td></tr></table></figure>
+
+<h3 id="转换模型"><a href="#转换模型" class="headerlink" title="转换模型"></a>转换模型</h3><p>我们得到scikit-learn模型后还不能直接在iOS中调用，需要经过苹果的工具<code>coremltools</code>进行转换，代码如下，关键是convert函数和save函数，其他都是关于模型的描述，可以不设置，可以说非常符合苹果API风格，简单易用。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> coremltools</span><br><span class="line"><span class="keyword">from</span> sklearn.externals <span class="keyword">import</span> joblib</span><br><span class="line"><span class="keyword">from</span> sklearn <span class="keyword">import</span> linear_model</span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line">    clf = joblib.load(<span class="string">'linear_regression.pkl'</span>)</span><br><span class="line">    coreml_model = coremltools.converters.sklearn.convert(clf, [<span class="string">"x1"</span>, <span class="string">"x2"</span>, <span class="string">"x3"</span>], <span class="string">"y"</span>)</span><br><span class="line">    coreml_model.author = <span class="string">"forrestlin"</span></span><br><span class="line">    coreml_model.license = <span class="string">"BSD"</span></span><br><span class="line">    coreml_model.input_description[<span class="string">'x1'</span>] = <span class="string">'x1 in [0, 100)'</span></span><br><span class="line">    coreml_model.input_description[<span class="string">'x2'</span>] = <span class="string">'x2 in [0, 100)'</span></span><br><span class="line">    coreml_model.input_description[<span class="string">'x3'</span>] = <span class="string">'x3 in [0, 100)'</span></span><br><span class="line">    coreml_model.output_description[<span class="string">'y'</span>] = <span class="string">'result'</span></span><br><span class="line">    coreml_model.save(<span class="string">'linear_regression.mlmodel'</span>)</span><br></pre></td></tr></table></figure>
+
+<h3 id="应用模型"><a href="#应用模型" class="headerlink" title="应用模型"></a>应用模型</h3><p>得到mlmodel文件后，我们可以直接将其拖入xcode工程中，选中模型文件会显示模型信息，如下图所示：<br><img src="1534754210_56_w636_h522.png" alt></p>
+<p>在导入模型后，xcode会自动生成模型类，以模型文件名为类名，创建模型实例后，我们调用prediction方法即可得到预测结果，十分简单，代码如下：</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> linearRegression = linear_regression()</span><br><span class="line"><span class="keyword">let</span> x1 = <span class="type">Double</span>.<span class="keyword">init</span>(x1TextField.text ?? <span class="string">"0"</span>) ?? <span class="number">0.0</span></span><br><span class="line"><span class="keyword">let</span> x2 = <span class="type">Double</span>.<span class="keyword">init</span>(x2TextFied.text ?? <span class="string">"0"</span>) ?? <span class="number">0.0</span></span><br><span class="line"><span class="keyword">let</span> x3 = <span class="type">Double</span>.<span class="keyword">init</span>(x3TextField.text ?? <span class="string">"0"</span>) ?? <span class="number">0.0</span></span><br><span class="line"><span class="keyword">guard</span> <span class="keyword">let</span> resultOutput = <span class="keyword">try</span>? linearRegression.prediction(x1: x1, x2: x2, x3: x3) <span class="keyword">else</span> &#123;</span><br><span class="line">	<span class="built_in">fatalError</span>(<span class="string">"Unexpected runtime error."</span>)</span><br><span class="line">&#125;</span><br><span class="line">resultLabel.text = <span class="string">"预测结果：\(String.init(format: "</span>%.3f<span class="string">", resultOutput.y))"</span></span><br></pre></td></tr></table></figure>
+
+<p>运行界面如下，由于是自己就是根据线性模型生成的数据，所以预测结果和真实结果完全一致，2333~<br><img src="1534754538_21_w342_h345.png" alt></p>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>demo虽小，但五脏俱全，希望以此打开苹果人工智能生态系统的大门，也希望对各位读者有用，App demo源码见<a href="mldemo.zip">附件</a>。</p>
+
+                
+
+                <hr>
+                <!-- Pager -->
+                <ul class="pager">
+                    
+                        <li class="previous">
+                            <a href="/2018/11/19/一文看懂CNN的卷积与转置卷积/" data-toggle="tooltip" data-placement="top" title="一文看懂CNN的卷积与转置卷积">&larr; Previous Post</a>
+                        </li>
+                    
+                    
+                        <li class="next">
+                            <a href="/2018/01/24/以太坊DApp开发初探/" data-toggle="tooltip" data-placement="top" title="以太坊DApp开发初探">Next Post &rarr;</a>
+                        </li>
+                    
+                </ul>
+
+                <!-- duoshuo Share start -->
+                
+                <!-- 多说 Share end-->
+
+                <!-- 多说评论框 start -->
+                
+                <!-- 多说评论框 end -->
+
+                <!-- disqus comment start -->
+                
+                <!-- disqus comment end -->
+            </div>
+            
+            <!-- Tabe of Content -->
+            <!-- Table of Contents -->
+
+    
+      <aside id="sidebar">
+        <div id="toc" class="toc-article">
+        <strong class="toc-title">Contents</strong>
+        
+          <ol class="toc-nav"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#介绍"><span class="toc-nav-number">1.</span> <span class="toc-nav-text">介绍</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#准备工具"><span class="toc-nav-number">2.</span> <span class="toc-nav-text">准备工具</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#生成数据"><span class="toc-nav-number">3.</span> <span class="toc-nav-text">生成数据</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#训练模型"><span class="toc-nav-number">4.</span> <span class="toc-nav-text">训练模型</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#转换模型"><span class="toc-nav-number">5.</span> <span class="toc-nav-text">转换模型</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#应用模型"><span class="toc-nav-number">6.</span> <span class="toc-nav-text">应用模型</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#总结"><span class="toc-nav-number">7.</span> <span class="toc-nav-text">总结</span></a></li></ol>
+        
+        </div>
+      </aside>
+    
+
+                
+            <!-- Sidebar Container -->
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                sidebar-container">
+
+                <!-- Featured Tags -->
+                
+                <section>
+                    <!-- no hr -->
+                    <h5><a href="/tags/">FEATURED TAGS</a></h5>
+                    <div class="tags">
+                       
+                          <a class="tag" href="/tags/#深度学习" title="深度学习">深度学习</a>
+                        
+                          <a class="tag" href="/tags/#iOS" title="iOS">iOS</a>
+                        
+                          <a class="tag" href="/tags/#CoreML" title="CoreML">CoreML</a>
+                        
+                    </div>
+                </section>
+                
+
+                <!-- Friends Blog -->
+                
+                <hr>
+                <h5>FRIENDS</h5>
+                <ul class="list-inline">
+
+                    
+                </ul>
+                
+            </div>
+        </div>
+    </div>
+</article>
+
+
+
+
+
+
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+<!-- anchor-js, Doc:http://bryanbraun.github.io/anchorjs/ -->
+<script>
+    async("https://cdn.bootcss.com/anchor-js/1.1.1/anchor.min.js",function(){
+        anchors.options = {
+          visible: 'hover',
+          placement: 'left',
+          icon: 'ℬ'
+        };
+        anchors.add().remove('.intro-header h1').remove('.subheading').remove('.sidebar-container h5');
+    })
+</script>
+<style>
+    /* place left on bigger screen */
+    @media all and (min-width: 800px) {
+        .anchorjs-link{
+            position: absolute;
+            left: -0.75em;
+            font-size: 1.1em;
+            margin-top : -0.1em;
+        }
+    }
+</style>
+
+
+
+    <!-- Footer -->
+    <!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                
+                
+                
+
+                
+
+                
+
+                
+                    <li>
+                        <a target="_blank"  href="https://github.com/forrestlam">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+
+                </ul>
+                <p class="copyright text-muted">
+                    Copyright &copy; Forrest Lam 2019 
+                </p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+<script src="/js/jquery.min.js"></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="/js/bootstrap.min.js"></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/js/hux-blog.min.js"></script>
+
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+
+<!-- 
+     Because of the native support for backtick-style fenced code blocks 
+     right within the Markdown is landed in Github Pages, 
+     From V1.6, There is no need for Highlight.js, 
+     so Huxblog drops it officially.
+
+     - https://github.com/blog/2100-github-pages-now-faster-and-simpler-with-jekyll-3-0  
+     - https://help.github.com/articles/creating-and-highlighting-code-blocks/    
+-->
+<!--
+    <script>
+        async("http://cdn.bootcss.com/highlight.js/8.6/highlight.min.js", function(){
+            hljs.initHighlightingOnLoad();
+        })
+    </script>
+    <link href="http://cdn.bootcss.com/highlight.js/8.6/styles/github.min.css" rel="stylesheet">
+-->
+
+
+<!-- jquery.tagcloud.js -->
+<script>
+    // only load tagcloud.js in tag.html
+    if($('#tag_cloud').length !== 0){
+        async("http://forrestlam.github.io/js/jquery.tagcloud.js",function(){
+            $.fn.tagcloud.defaults = {
+                //size: {start: 1, end: 1, unit: 'em'},
+                color: {start: '#bbbbee', end: '#0085a1'},
+            };
+            $('#tag_cloud a').tagcloud();
+        })
+    }
+</script>
+
+<!--fastClick.js -->
+<script>
+    async("https://cdn.bootcss.com/fastclick/1.0.6/fastclick.min.js", function(){
+        var $nav = document.querySelector("nav");
+        if($nav) FastClick.attach($nav);
+    })
+</script>
+
+
+<!-- Google Analytics -->
+
+
+
+
+<!-- Baidu Tongji -->
+
+
+
+
+
+
+	<a id="rocket" href="#top" class=""></a>
+	<script type="text/javascript" src="/js/totop.js?v=1.0.0" async=""></script>
+    <script type="text/javascript" src="/js/toc.js?v=1.0.0" async=""></script>
+<!-- Image to hack wechat -->
+<img src="http://forrestlam.github.io/img/icon_wechat.png" width="0" height="0" />
+<!-- Migrate from head to bottom, no longer block render and still work -->
+
+</body>
+
+</html>

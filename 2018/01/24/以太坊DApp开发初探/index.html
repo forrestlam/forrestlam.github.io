@@ -1,0 +1,667 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Head tag -->
+<head><meta name="generator" content="Hexo 3.9.0">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="google-site-verification" content="xBT4GhYoi5qRD5tr338pgPM5OWHHIDR6mNg1a3euekI">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="一位iOS开发者的日常发牢骚">
+    <meta name="keyword" content="iOS OpenGL">
+    <link rel="shortcut icon" href="/img/linker_avatar.jpg">
+    <!-- Place this tag in your head or just before your close body tag. -->
+    <script async defer src="https://buttons.github.io/buttons.js"></script>
+    <title>
+        
+          以太坊DApp开发初探 - Forrestlam | iOS开发
+        
+    </title>
+
+    <link rel="canonical" href="http://forrestlam.github.io/2018/01/24/以太坊DApp开发初探/">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    <!-- Custom CSS --> 
+    <link rel="stylesheet" href="/css/beantech.min.css">
+    
+    <!-- Pygments Highlight CSS -->
+    <link rel="stylesheet" href="/css/highlight.css">
+
+    <link rel="stylesheet" href="/css/widget.css">
+
+    <link rel="stylesheet" href="/css/rocket.css">
+
+    <link rel="stylesheet" href="/css/signature.css">
+
+    <link rel="stylesheet" href="/css/toc.css">
+
+    <!-- Custom Fonts -->
+    <!-- <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css"> -->
+    <!-- Hux change font-awesome CDN to qiniu -->
+    <link href="https://cdn.staticfile.org/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+
+    <!-- Hux Delete, sad but pending in China
+    <link href='http://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/
+    css'>
+    -->
+
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <!-- ga & ba script hoook -->
+    <script></script>
+</head>
+
+
+<!-- hack iOS CSS :active style -->
+<body ontouchstart="">
+	<!-- Modified by Yu-Hsuan Yen -->
+<!-- Post Header -->
+<style type="text/css">
+    header.intro-header{
+        
+            background-image: url('ethereum.jpg')
+            /*post*/
+        
+    }
+    
+    #signature{
+        background-image: url('/img/signature/ForrestLamSign-white.png');
+    }
+    
+</style>
+
+<header class="intro-header" >
+    <!-- Signature -->
+    <div id="signature">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                
+                    <div class="post-heading">
+                        <div class="tags">
+                            
+                              <a class="tag" href="/tags/#区块链" title="区块链">区块链</a>
+                            
+                              <a class="tag" href="/tags/#以太坊" title="以太坊">以太坊</a>
+                            
+                              <a class="tag" href="/tags/#智能合约" title="智能合约">智能合约</a>
+                            
+                              <a class="tag" href="/tags/#Solidity" title="Solidity">Solidity</a>
+                            
+                        </div>
+                        <h1>以太坊DApp开发初探</h1>
+                        <h2 class="subheading">炒币这么火，咱们来玩玩里面的技术吧</h2>
+                        <span class="meta">
+                            Posted by Forrest Lam on
+                            2018-01-24
+                        </span>
+                    </div>
+                
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+	
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">Forrest Lam</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <!-- Known Issue, found by Hux:
+            <nav>'s height woule be hold on by its content.
+            so, when navbar scale out, the <nav> will cover tags.
+            also mask any touch event of tags, unfortunately.
+        -->
+        <div id="huxblog_navbar">
+            <div class="navbar-collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="/">Home</a>
+                    </li>
+
+                    
+
+                        
+                    
+
+                        
+                        <li>
+                            <a href="/about/">About</a>
+                        </li>
+                        
+                    
+
+                        
+                        <li>
+                            <a href="/tags/">Tags</a>
+                        </li>
+                        
+                    
+
+                        
+                        <li>
+                            <a href="/archive/">Archives</a>
+                        </li>
+                        
+                    
+                    
+                </ul>
+            </div>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+<script>
+    // Drop Bootstarp low-performance Navbar
+    // Use customize navbar with high-quality material design animation
+    // in high-perf jank-free CSS3 implementation
+    var $body   = document.body;
+    var $toggle = document.querySelector('.navbar-toggle');
+    var $navbar = document.querySelector('#huxblog_navbar');
+    var $collapse = document.querySelector('.navbar-collapse');
+
+    $toggle.addEventListener('click', handleMagic)
+    function handleMagic(e){
+        if ($navbar.className.indexOf('in') > 0) {
+        // CLOSE
+            $navbar.className = " ";
+            // wait until animation end.
+            setTimeout(function(){
+                // prevent frequently toggle
+                if($navbar.className.indexOf('in') < 0) {
+                    $collapse.style.height = "0px"
+                }
+            },400)
+        }else{
+        // OPEN
+            $collapse.style.height = "auto"
+            $navbar.className += " in";
+        }
+    }
+</script>
+
+
+    <!-- Main Content -->
+    <!-- Modify by Yu-Hsuan Yen -->
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+
+            <!-- Post Container -->
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                post-container">
+
+                <p>关于“以太猫”的流行，相信不少人都有所耳闻，甚至入手养过几只。从游戏性来说，其本质就是一个简单的收集交换类游戏，然鹅，是区块链赋予了它魅力，让用户每一只猫永远不会消失、不被篡改，更重要的是可以炒（滑稽脸），于是今天借此机会一探以太坊应用DApp的开发过程以及开发中遇到的坑。</p>
+<h2 id="以太坊DApp介绍"><a href="#以太坊DApp介绍" class="headerlink" title="以太坊DApp介绍"></a>以太坊DApp介绍</h2><p>以太坊是一个区块链公有链平台，和比特币类似，以太坊也有其代币–以太币，可在挖矿、交易中获得，然而，说到以太坊和比特币的区别就是其支持智能合约，一个智能合约由代码和数据组成，和其他编程语言中的类类似，一个以太坊分布式应用DApp由众多智能合约组成，每个智能合约都有其独特的地址，可以看做以太坊上的一个账户，可以存取以太币，作用就像一个裁判、中间人。一个简单但不是很恰当的例子就是赌博，我和小明打赌明天会下雨，输的人给赢的人一百块，这种情况我们在现实中一般会以下面两种方法实现：</p>
+<ul>
+<li>依靠朋友间的信任。等明天到了，根据下雨与否进行交易。但这种方法一般不可行，因为毕竟是朋友，输的人会自动把昨天的打赌作为玩笑话，而赢的人也碍于面子不好意思要钱，所以交易无法达成。</li>
+<li>依靠公证的第三方。OK，我们这次认真点，找一个彼此都认识的朋友小方作为公证，把我和小明的赌注一百块都先存着，等明天到了再给赢的人两百块。这种方法确实比第一种要好，但还是害怕就是第三方拿着两个人的赌注夹带私逃了，这对交易双方的损失更大。</li>
+</ul>
+<p>OK，智能合约就是为了解决以上的信任问题而诞生的，由于智能合约存放于区块链，而区块链具有的不可抵赖和不可篡改性，使得智能合约比现实中任意一个机构的公信力都强。其实，区块链去中心化思想最大的优势就是解决了信任问题，而现实中最常见需要解决信任问题的场景莫过于涉及货币交易，从以太坊的众多DApp列表<a href="https://www.stateofthedapps.com/" target="_blank" rel="noopener">https://www.stateofthedapps.com/</a> 中看到，大多数都是关于交易、赌博性质的应用，可以说“以太猫”的横空出世刷新了人们对于区块链应用的固有认知。</p>
+<h2 id="开发准备"><a href="#开发准备" class="headerlink" title="开发准备"></a>开发准备</h2><h3 id="开发以太坊DApp需要安装以下环境或工具，以Mac-OS-X为例"><a href="#开发以太坊DApp需要安装以下环境或工具，以Mac-OS-X为例" class="headerlink" title="开发以太坊DApp需要安装以下环境或工具，以Mac OS X为例"></a>开发以太坊DApp需要安装以下环境或工具，以Mac OS X为例</h3><ul>
+<li><code>$ brew install node</code><br>以太坊DApp其他开发工具都是通过npm安装的，node.js大法好，mac用户可通过homebrew安装。</li>
+<li><code>$ npm install ethereumjs-testrpc</code><br>以太坊提供的区块链测试环境，所有节点都是虚拟的存在内存中，启动后默认创建10个账户。读者也可以选择安装<code>geth</code>搭建私有链，使用真实节点存储，具体可参考<a href="http://km.oa.com/group/18297/articles/show/330349" target="_blank" rel="noopener">http://km.oa.com/group/18297/articles/show/330349</a> 。</li>
+<li><code>$ npm install web3</code><br>以太坊提供读写区块链数据的JavaScript接口，源码地址：<a href="https://github.com/ethereum/web3.js/" target="_blank" rel="noopener">https://github.com/ethereum/web3.js/</a> ，通过web3.js我们可以访问各个账户、部署智能合约、调用合约方法、发起交易等等。</li>
+<li><code>$ npm install truffle</code><br>第三方提供的开源以太坊DApp集成工具，源码地址：<a href="https://github.com/trufflesuite/truffle" target="_blank" rel="noopener">https://github.com/trufflesuite/truffle</a> ，truffle工具会帮助我们编译、测试、打包和部署DApp项目中的所有合约，类似的还有Meteor（官方推荐工具，但实用下来感觉没有truffle方便，而且文档也较少）。</li>
+</ul>
+<h3 id="以下是非必需工具"><a href="#以下是非必需工具" class="headerlink" title="以下是非必需工具"></a>以下是非必需工具</h3><ul>
+<li><code>$ npm install truffle-contract</code><br>基于web3.js封装的JavaScript与智能合约交互接口，通过链式调用将对合约的各个操作串联在一起，具体API参考源码地址：<a href="https://github.com/trufflesuite/truffle-contract" target="_blank" rel="noopener">https://github.com/trufflesuite/truffle-contract</a></li>
+<li><code>$ npm install express</code><br>node.js社区中基于<code>connect</code>流行的服务器开发框架，本文使用该框架搭建后台服务器，读者可自行选择其他框架。</li>
+</ul>
+<h3 id="编程语言"><a href="#编程语言" class="headerlink" title="编程语言"></a>编程语言</h3><p>编写一个DApp可以说是包括两部分，合约部分和业务逻辑部分。</p>
+<h4 id="智能合约"><a href="#智能合约" class="headerlink" title="智能合约"></a>智能合约</h4><ul>
+<li>Solidity，类JavaScript，这是以太坊推荐的旗舰语言，也是最流行的智能合约语言，具体用法参考<a href="http://solidity.readthedocs.io/en/latest/" target="_blank" rel="noopener">http://solidity.readthedocs.io/en/latest/</a> ，本文所有合约都使用该语言编写，另外测试、调试Solidity有一个非常好的在线IDE–Remix <a href="https://remix.ethereum.org/" target="_blank" rel="noopener">https://remix.ethereum.org/</a>，由以太坊团队推出的。</li>
+<li>Serpent，类Python。</li>
+<li>LLL，类Lisp。</li>
+</ul>
+<h4 id="业务逻辑"><a href="#业务逻辑" class="headerlink" title="业务逻辑"></a>业务逻辑</h4><p>业务逻辑部分即提供客户端与智能合约交互的接口，相当于目前BS结构中的后台逻辑，因此业务逻辑部分可部署在中心服务器中，而且在以太坊中每个智能合约函数的每一行代码都有固定的gas费用以及延时的，一些简单的逻辑应该交由业务逻辑处理，编写业务逻辑目前提供有以下几种语言：</p>
+<ul>
+<li>JavaScript，主要是基于Web3.js这个库调用智能合约，本文例子也是使用JavaScript编写的。</li>
+<li>Go，上述提到的以太坊私链搭建工具geth就是使用Go编写的。</li>
+<li>Python</li>
+<li>Java</li>
+<li>Ruby</li>
+<li>Haskell</li>
+<li>Rust </li>
+</ul>
+<h2 id="DApp实践"><a href="#DApp实践" class="headerlink" title="DApp实践"></a>DApp实践</h2><p>废话不多说，下面我们通过一个DApp例子来窥探一下区块链智能合约的魅力，demo源码地址：<a href="http://git.code.oa.com/forrestlin/QzoneBlockPet" target="_blank" rel="noopener">http://git.code.oa.com/forrestlin/QzoneBlockPet</a>。</p>
+<h3 id="Demo功能介绍"><a href="#Demo功能介绍" class="headerlink" title="Demo功能介绍"></a>Demo功能介绍</h3><p>该demo是一个卡片收集类游戏，业务场景为每个用户都拥有一只随机的宠物，用户通过收集卡片作用于宠物身上进行装扮，而卡片的收集来源分三种：</p>
+<ul>
+<li>系统定期为随机用户生成卡片</li>
+<li>与其他用户交换卡片</li>
+<li>在卡片商城中购买卡片</li>
+</ul>
+<h3 id="Demo目录结构"><a href="#Demo目录结构" class="headerlink" title="Demo目录结构"></a>Demo目录结构</h3><p>我们通过<code>$ truffle init</code>命令创建一个DApp项目，truffle会帮我们组织好一个DApp的目录结构，如下所示，其中app目录为笔者添加的，用于存放业务逻辑代码。</p>
+<ul>
+<li><p>app<br>业务逻辑代码，后面再展开讨论</p>
+</li>
+<li><p>build<br>合约编译生成目录，不要手动修改</p>
+</li>
+<li><p>contracts<br>合约目录，后面展开讨论</p>
+</li>
+<li><p>migrations<br>truffle部署配置文件，新的合约需要部署需要修改里面的配置文件<code>1_initial_migration.js</code>，该demo包含两个合约，加上truffle部署时需要使用的合约，一共三个合约，代码如下所示，当添加一个合约时需要在该文件中添加合约变量而且需要通过deployer部署到区块链，需要注意的是这里当前目录是contracts目录。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> Migrations = artifacts.require(<span class="string">"./Migrations.sol"</span>);</span><br><span class="line"><span class="keyword">var</span> PetCard = artifacts.require(<span class="string">"./PetCard.sol"</span>);</span><br><span class="line"><span class="keyword">var</span> UserCenter = artifacts.require(<span class="string">"./UserCenter.sol"</span>);</span><br><span class="line"><span class="built_in">module</span>.exports = <span class="function"><span class="keyword">function</span>(<span class="params">deployer</span>) </span>&#123;</span><br><span class="line">  deployer.deploy(Migrations);</span><br><span class="line">  deployer.deploy(PetCard);</span><br><span class="line">  deployer.deploy(UserCenter);</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>test<br>合约的测试文件，我们可以在该目录中存放各个合约的测试代码，类似于其他编程语言中的单元测试，该文章不展开讨论。</p>
+</li>
+<li><p>truffle.js<br>区块链网络配置文件，在truffle部署合约时会使用该文件定义的地址，目前配的是testrpc默认测试环境，如下所示：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">module</span>.exports = &#123;</span><br><span class="line">   networks: &#123;</span><br><span class="line">   development: &#123;</span><br><span class="line">   host: <span class="string">"localhost"</span>,</span><br><span class="line">   port: <span class="number">8545</span>,</span><br><span class="line">   network_id: <span class="string">"*"</span> <span class="comment">// Match any network id</span></span><br><span class="line">  &#125;</span><br><span class="line"> &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<h3 id="Demo运行方式"><a href="#Demo运行方式" class="headerlink" title="Demo运行方式"></a>Demo运行方式</h3><ol>
+<li>安装上述提到的<a href="#开发准备">依赖</a>(包括非必需)</li>
+<li><code>$ testrpc</code><br>启动区块链测试环境，可以看到testrpc在内存中为我们创建了10个虚拟账户以及对应的私钥。<br><img src="1516695209_99_w1640_h1266.png" alt></li>
+<li><code>$ truffle compile</code><br>编译智能合约，底层调用的是<code>solc</code>编译器，该编译方式是增量的，如果要全量编译，可加上<code>--all</code>参数。<br><img src="1516697720_53_w1810_h746.png" alt></li>
+<li><code>$ truffle migrate --reset</code><br>部署所有智能合约，部署的环境由truffle.js定义，和compile类似，migrate也是增量部署，如果要重新部署所有合约，可加上<code>--reset</code>参数。<br><img src="1516697831_13_w1398_h702.png" alt></li>
+<li><code>$ cd app</code></li>
+<li><code>$ npm start</code><br>启动服务器</li>
+<li>浏览器访问localhost:8080，目前提供的接口详见INTERFACE.md文件，下面展示其中两个接口。</li>
+</ol>
+<ul>
+<li>生成卡片</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>接口名称</th>
+<th>方法</th>
+<th>路由参数</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>createRandomCard</td>
+<td>GET</td>
+<td>无</td>
+</tr>
+</tbody></table>
+<table>
+<thead>
+<tr>
+<th>例子</th>
+<th>返回</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>/createRandomCard</td>
+<td>{“cardId”:”2”,”code”:”0x616161666”,”owner”:”0x5727b589bca4500e896ffc82e3fedf56cae7017f”,”value”:”52”}</td>
+</tr>
+</tbody></table>
+<ul>
+<li>获取用户所有卡片</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>接口名称</th>
+<th>方法</th>
+<th>路由参数</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>getAllCardsForUser</td>
+<td>GET</td>
+<td>/:address</td>
+</tr>
+</tbody></table>
+<table>
+<thead>
+<tr>
+<th>例子</th>
+<th>返回</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>/getAllCardsForUser/0xc3d9b7ea1e42b04dddf3475b464bb1abd5f8451f</td>
+<td>[{“cardId”:”0”,”code”:”0x616161666”,”value”:”4”}]</td>
+</tr>
+<tr>
+<td>需要注意的是上面两个方法调用前都需要设置gas（以太坊交易手续费），不过由于demo运行在testrpc中所有账户的balance都是虚拟的，业务逻辑直接从接口调用方账户扣除了gas，对其屏蔽了该过程，但如果正式部署到生产环境我们需要先询问用户是否愿意付该笔gas然后再真正调用合约接口，因此，以太坊的web3.js提供了<code>estimateGas</code>方法来预估合约函数执行所需的gas。</td>
+<td></td>
+</tr>
+</tbody></table>
+<h3 id="编写智能合约"><a href="#编写智能合约" class="headerlink" title="编写智能合约"></a>编写智能合约</h3><p>智能合约使用Solidity语言编写，语法有点类似于JavaScript，文件名以.sol结尾，通常来说一个.sol文件定义一个合约，相当于Java中一个文件定义一个public class。一个合约通常包含两部分，成员变量和成员函数。<br>进入本demo的contracts目录，可以看见里面包含了以下文件：</p>
+<ul>
+<li>Migrations.sol：truffle创建目录时创建的合约，用于部署DApp</li>
+<li>PetCard.sol：本demo核心合约，定义了宠物卡片合约</li>
+<li>strings.sol：第三方定义的字符串类库，本demo主要使用了其分割字符串的函数</li>
+<li>UserCenter.sol：用户中心合约，用于注册用户和查询用户</li>
+</ul>
+<p>下面展示的是宠物卡片合约的部分代码。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br></pre></td><td class="code"><pre><span class="line">pragma solidity ^<span class="number">0.4</span><span class="number">.17</span>;</span><br><span class="line"></span><br><span class="line">contract PetCard &#123;</span><br><span class="line">    struct Card &#123;</span><br><span class="line">        bytes32 code; <span class="comment">//卡片代码，决定卡片的功能</span></span><br><span class="line">        uint256 value;</span><br><span class="line">        address owner;</span><br><span class="line">        bool isSelling;</span><br><span class="line">        uint sellingPrice;</span><br><span class="line">        uint cardId;</span><br><span class="line">    &#125;</span><br><span class="line">    enum ErrorCode &#123;ERROR_NO_ERROR, ERROR_INDEX_OUT_OF_RANGE, ERROR_WRONG_OWNER, ERROR_CARD_IS_SELLING, ERROR_CARD_IS_NOT_SELLING, ERROR_PRICE_NOT_ENOUGH&#125;</span><br><span class="line">    Card[] cards;</span><br><span class="line">    address CEO;</span><br><span class="line">    <span class="function"><span class="keyword">function</span> <span class="title">PetCard</span>(<span class="params"></span>) <span class="title">public</span> <span class="title">payable</span> </span>&#123;</span><br><span class="line">        CEO = msg.sender;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 匿名函数，当外部调用找不到时调用该函数</span></span><br><span class="line">	event FallbackTrigged(bytes data);</span><br><span class="line">	<span class="function"><span class="keyword">function</span>(<span class="params"></span>) <span class="title">public</span> <span class="title">payable</span> </span>&#123;</span><br><span class="line">		FallbackTrigged(msg.data);</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">    event BuyCardEvent(uint cardId, bool isSuccess, ErrorCode errorCode);</span><br><span class="line">    <span class="comment">// 从卡片商城中购买卡片</span></span><br><span class="line">    <span class="function"><span class="keyword">function</span> <span class="title">buyCard</span>(<span class="params">uint cardId</span>) <span class="title">public</span> <span class="title">payable</span> </span>&#123;</span><br><span class="line">        address buyer = msg.sender;</span><br><span class="line">        <span class="comment">// 判断card下标是否合法，不合法时退款给买家</span></span><br><span class="line">        <span class="keyword">if</span> (cardId &gt;= cards.length || cardId &lt; <span class="number">0</span>) &#123;</span><br><span class="line">            buyer.transfer(msg.value);</span><br><span class="line">            BuyCardEvent(cardId, <span class="literal">false</span>, ErrorCode.ERROR_INDEX_OUT_OF_RANGE);</span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        Card storage card = cards[cardId];</span><br><span class="line">        <span class="comment">// 判断消费金额是否小于card价格</span></span><br><span class="line">        <span class="keyword">if</span> (msg.value &lt; card.sellingPrice) &#123;</span><br><span class="line">            buyer.transfer(msg.value);</span><br><span class="line">            BuyCardEvent(cardId, <span class="literal">false</span>, ErrorCode.ERROR_PRICE_NOT_ENOUGH);</span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        &#125; </span><br><span class="line">        <span class="comment">// 判断卡片是否正在销售</span></span><br><span class="line">        <span class="keyword">if</span> (!card.isSelling) &#123;</span><br><span class="line">            buyer.transfer(msg.value);</span><br><span class="line">            BuyCardEvent(cardId, <span class="literal">false</span>, ErrorCode.ERROR_CARD_IS_NOT_SELLING);</span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">// 将卡片卖的钱还给卖家</span></span><br><span class="line">        <span class="keyword">if</span> (<span class="keyword">this</span>.balance &gt;= card.sellingPrice) &#123;</span><br><span class="line">            card.owner.transfer(card.sellingPrice);</span><br><span class="line">        &#125;</span><br><span class="line">        card.owner = buyer;</span><br><span class="line">        card.isSelling = <span class="literal">false</span>;</span><br><span class="line">        card.sellingPrice = <span class="number">0</span>;</span><br><span class="line">        BuyCardEvent(cardId, <span class="literal">true</span>, ErrorCode.ERROR_NO_ERROR);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 获取用户所有卡片</span></span><br><span class="line">    <span class="function"><span class="keyword">function</span> <span class="title">getAllCardsForUser</span>(<span class="params"></span>) <span class="title">public</span> <span class="title">constant</span> <span class="title">returns</span> (<span class="params">uint[] cardIds, bytes32[] codes, uint[] values, uint len</span>) </span>&#123;</span><br><span class="line">        cardIds = <span class="keyword">new</span> uint[](cards.length);</span><br><span class="line">        codes = <span class="keyword">new</span> bytes32[](cards.length);</span><br><span class="line">        values = <span class="keyword">new</span> uint[](cards.length);</span><br><span class="line">        <span class="comment">// codes = new string[](cards.length);</span></span><br><span class="line">        len = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">for</span> (uint i = <span class="number">0</span>; i &lt; cards.length; i++) &#123;</span><br><span class="line">            <span class="keyword">if</span> (cards[i].owner == msg.sender) &#123;</span><br><span class="line">                cardIds[len] = cards[i].cardId;</span><br><span class="line">                codes[len] = cards[i].code;</span><br><span class="line">                values[len] = cards[i].value;</span><br><span class="line">                len++;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    event CreateNewCardEvent(uint cardId, bytes32 code, address owner, uint value);</span><br><span class="line">    <span class="comment">// 给用户掉落新卡片</span></span><br><span class="line">    <span class="function"><span class="keyword">function</span> <span class="title">createNewCardForUser</span>(<span class="params">bytes32 code, uint value</span>) <span class="title">public</span> </span>&#123;</span><br><span class="line">        Card memory card = Card(&#123;<span class="attr">code</span>: code, <span class="attr">value</span>: value, <span class="attr">owner</span>: msg.sender, <span class="attr">isSelling</span>: <span class="literal">false</span>, <span class="attr">cardId</span>: cards.length, <span class="attr">sellingPrice</span>: <span class="number">0</span>&#125;);</span><br><span class="line">        cards.push(card);</span><br><span class="line">        CreateNewCardEvent(card.cardId, card.code, card.owner, card.value);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="定义卡片结构与成员变量"><a href="#定义卡片结构与成员变量" class="headerlink" title="定义卡片结构与成员变量"></a>定义卡片结构与成员变量</h4><p>合约内部可以定义多个结构体，关键字为struct，结构体内部也可定义成员变量，允许的类型和合约一样。此外，合约支持数据类型包括以下几种：</p>
+<ul>
+<li>整型，uintx / intx，其中x代表整型所占用的位数，从8到256，步长为8，如果我们直接使用uint / int，则与uint256 / int256等价。</li>
+<li>布尔型，bool，有true/false两个值。</li>
+<li>浮点型，fixedMxN / ufixedMxN，浮点数在Solidity中支持得不是很好，它与其他语言中的浮点数并不一样，Solidity中浮点数在声明时就必须确定长度，而其他语言是可变的，M代表的是浮点数占用的总位数，从8到256，步长为8，N代表小数部分的长度，范围是0-80。</li>
+<li>定长字节型，bytesx，其中x代表变量所占字节长度，范围是1-32，当变量打印出来时，显示的是十六进制。</li>
+<li>变长字节型，bytes或string，两者区别在于bytes使用十六进制标识，string是用UTF-8表示。</li>
+<li>地址，address, 等价于bytes20，而且Solidity为地址变量预设了几个方法，例如，<code>balance</code>方法获取地址对应账户的余额，<code>transfer</code>方法转账以太币到地址对应的账户中，转账者为调用者，收款者为address，另一个方法<code>send</code>类似于<code>transfer</code>也是转账，但值得注意的是，当<code>transfer</code>失败时，会回滚交易并抛出异常，而<code>send</code>方法则不会。</li>
+<li>枚举，enum，和其他语言一样，Solidity也支持枚举值，语法也类似，可参考代码中错误码枚举值的定义。</li>
+</ul>
+<p>根据上述的数据类型，我们定义卡片的结构体，包括卡片代码、卡片价值、卡片拥有者、卡片是否正在出售、卡片出售价格以及卡片id。然后，定义了函数执行可能会发生的错误码，还有一个卡片的集合以及合约的创建者CEO。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">struct Card &#123;</span><br><span class="line">	bytes32 code; <span class="comment">//卡片代码，决定卡片的功能</span></span><br><span class="line">	uint256 value;</span><br><span class="line">	address owner;</span><br><span class="line">	bool isSelling;</span><br><span class="line">	uint sellingPrice;</span><br><span class="line">	uint cardId;</span><br><span class="line">&#125;</span><br><span class="line">enum ErrorCode &#123;ERROR_NO_ERROR, ERROR_INDEX_OUT_OF_RANGE, ERROR_WRONG_OWNER, ERROR_CARD_IS_SELLING, ERROR_CARD_IS_NOT_SELLING, ERROR_PRICE_NOT_ENOUGH&#125;</span><br><span class="line">Card[] cards;</span><br><span class="line">address CEO;</span><br></pre></td></tr></table></figure>
+
+<h4 id="函数"><a href="#函数" class="headerlink" title="函数"></a>函数</h4><p>在Solidity中函数的定义语法是</p>
+<p><strong><em>function</em></strong> 函数名(参数列表) 修饰符 <strong><em>returns</em></strong> (返回值列表)</p>
+<p>这里值得注意的是，在函数生命中返回值列表我们可以声明返回值的名字，类似于形参，当在函数体中给返回值变量赋值后，我们可以不用写<code>return</code>，但如果写了还是以<code>return</code>为主，同时，一个函数返回值支持多个，调用者拿到的将是一个返回值数组，和python有点像。</p>
+<p>另外，EVM会给每个合约的函数传入一个名为msg的对象，该对象包含几个属性，如sender是调用者账户地址、value是调用者执行该函数支付的以太币（单位是wei）、data是函数调用的描述。除了data外，其他属性的值是由调用者传入，详见<a href="#编写业务逻辑">业务逻辑代码</a>的介绍。</p>
+<h4 id="构建函数和匿名函数"><a href="#构建函数和匿名函数" class="headerlink" title="构建函数和匿名函数"></a>构建函数和匿名函数</h4><p>和大部分语言一样，Solidity中每个合约也有构建函数，在构建函数中我们可以做一些初始化的操作，在下面的代码中我们注意到函数后有两个修饰符，分别是<code>public</code>和<code>payable</code>，其中<code>public</code>说明该函数外部合约也可见，对应的还有<code>external</code>，<code>private</code>，<code>internal</code>，要说到这四者的区别，需要查看函数的调用方式和可见性，本文就不展开了。然后<code>payable</code>说明该函数会涉及货币交易，同时当我们在一个合约的其他函数中调用了转账操作，那么构建函数必须也得声明为<code>payable</code>。<br>匿名函数，也就是没有名字的函数，每个合约中最多可定义一个，当其他地方调用该合约不存在的函数或者出现异常时，EVM（以太坊智能合约执行虚拟机）会自动调用合约的匿名函数，同样地，当合约内其他函数有转账操作时匿名函数也需要加上<code>payable</code>修饰。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">PetCard</span>(<span class="params"></span>) <span class="title">public</span> <span class="title">payable</span> </span>&#123;</span><br><span class="line">	CEO = msg.sender;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 匿名函数，当外部调用找不到时调用该函数</span></span><br><span class="line">event FallbackTrigged(bytes data);</span><br><span class="line"><span class="function"><span class="keyword">function</span>(<span class="params"></span>) <span class="title">public</span> <span class="title">payable</span> </span>&#123;</span><br><span class="line">	FallbackTrigged(msg.data);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="事件"><a href="#事件" class="headerlink" title="事件"></a>事件</h4><p>代码中我们定义了多个<code>event</code>，每个<code>event</code>只需要定义其名字和参数列表即可以，其作用相当于其他语言中的log，在函数中传入实参即可记录，虽说<code>event</code>的作用和log一样，但在Solidity中作用却非同小可，因为当一个函数是以transaction的形式被调用，调用者是无法拿到返回值的，因为transaction的调用是异步的，EVM无法立刻执行给出返回值，所以调用者只能通过<code>event</code>的记录取得函数执行后的数据，具体操作流程见<a href="#编写业务逻辑">业务逻辑代码</a>的介绍。</p>
+<h4 id="购买卡片"><a href="#购买卡片" class="headerlink" title="购买卡片"></a>购买卡片</h4><p>定义购买卡片的函数，函数一开始我们写了三个是否合法的判断，这里可以使用require关键字对这些条件进行限定，但由于笔者希望调用者可以接收到错误信息，这里就使用了四个if判断，并且使用了事件通知调用者，同时当条件不满足时我们需要做一些回滚操作，例如将金额退还给调用者账户。而当条件满足后，我们将卡片定价转给卖家，转移卡片拥有者。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line">event BuyCardEvent(uint cardId, bool isSuccess, ErrorCode errorCode);</span><br><span class="line"><span class="comment">// 从卡片商城中购买卡片</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">buyCard</span>(<span class="params">uint cardId</span>) <span class="title">public</span> <span class="title">payable</span> </span>&#123;</span><br><span class="line">    address buyer = msg.sender;</span><br><span class="line">    <span class="comment">// 判断card下标是否合法，不合法时退款给买家</span></span><br><span class="line">    <span class="keyword">if</span> (cardId &gt;= cards.length || cardId &lt; <span class="number">0</span>) &#123;</span><br><span class="line">        buyer.transfer(msg.value);</span><br><span class="line">        BuyCardEvent(cardId, <span class="literal">false</span>, ErrorCode.ERROR_INDEX_OUT_OF_RANGE);</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    Card storage card = cards[cardId];</span><br><span class="line">    <span class="comment">// 判断消费金额是否小于card价格</span></span><br><span class="line">    <span class="keyword">if</span> (msg.value &lt; card.sellingPrice) &#123;</span><br><span class="line">        buyer.transfer(msg.value);</span><br><span class="line">        BuyCardEvent(cardId, <span class="literal">false</span>, ErrorCode.ERROR_PRICE_NOT_ENOUGH);</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125; </span><br><span class="line">    <span class="comment">// 判断卡片是否正在销售</span></span><br><span class="line">    <span class="keyword">if</span> (!card.isSelling) &#123;</span><br><span class="line">        buyer.transfer(msg.value);</span><br><span class="line">        BuyCardEvent(cardId, <span class="literal">false</span>, ErrorCode.ERROR_CARD_IS_NOT_SELLING);</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// 将卡片卖的钱还给卖家</span></span><br><span class="line">    <span class="keyword">if</span> (<span class="keyword">this</span>.balance &gt;= card.sellingPrice) &#123;</span><br><span class="line">        card.owner.transfer(card.sellingPrice);</span><br><span class="line">    &#125;</span><br><span class="line">    card.owner = buyer;</span><br><span class="line">    card.isSelling = <span class="literal">false</span>;</span><br><span class="line">    card.sellingPrice = <span class="number">0</span>;</span><br><span class="line">    BuyCardEvent(cardId, <span class="literal">true</span>, ErrorCode.ERROR_NO_ERROR);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="遍历卡片"><a href="#遍历卡片" class="headerlink" title="遍历卡片"></a>遍历卡片</h4><p>该函数的作用是获取所有属于调用者账户的卡片，值得注意的是，该函数在EVM中是一个昂贵的操作，首先我们声明了三个定长数组（定长是和临时变量存储的地方有关），每个长度都等于所有卡片数组的大小，因此每个数组都已经开销了不少gas，然后遍历又是一个耗时操作，又需要花费gas，而且函数在编译时并不知道cards的长度，所以即使调用者使用estimategas函数预估该函数所需gas也是不准确的，这对于调用者是危险的，随时都可能因为gas不够而执行失败。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">getAllCardsForUser</span>(<span class="params"></span>) <span class="title">public</span> <span class="title">constant</span> <span class="title">returns</span> (<span class="params">uint[] cardIds, bytes32[] codes, uint[] values, uint len</span>) </span>&#123;</span><br><span class="line">    cardIds = <span class="keyword">new</span> uint[](cards.length);</span><br><span class="line">    codes = <span class="keyword">new</span> bytes32[](cards.length); <span class="comment">//这里不能用string，solidity不支持定长的变长数组</span></span><br><span class="line">    values = <span class="keyword">new</span> uint[](cards.length);</span><br><span class="line">    <span class="comment">// codes = new string[](cards.length);</span></span><br><span class="line">    len = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span> (uint i = <span class="number">0</span>; i &lt; cards.length; i++) &#123;</span><br><span class="line">        <span class="keyword">if</span> (cards[i].owner == msg.sender) &#123;</span><br><span class="line">            cardIds[len] = cards[i].cardId;</span><br><span class="line">            codes[len] = cards[i].code;</span><br><span class="line">            values[len] = cards[i].value;</span><br><span class="line">            len++;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="生成卡片"><a href="#生成卡片" class="headerlink" title="生成卡片"></a>生成卡片</h4><p>这里生成卡片的逻辑交给业务层，合约只负责根据参数创建一个新的卡片，最后通知调用者即业务层。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">event CreateNewCardEvent(uint cardId, bytes32 code, address owner, uint value);</span><br><span class="line"><span class="comment">// 给用户掉落新卡片</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">createNewCardForUser</span>(<span class="params">bytes32 code, uint value</span>) <span class="title">public</span> </span>&#123;</span><br><span class="line">    Card memory card = Card(&#123;<span class="attr">code</span>: code, <span class="attr">value</span>: value, <span class="attr">owner</span>: msg.sender, <span class="attr">isSelling</span>: <span class="literal">false</span>, <span class="attr">cardId</span>: cards.length, <span class="attr">sellingPrice</span>: <span class="number">0</span>&#125;);</span><br><span class="line">    cards.push(card);</span><br><span class="line">    CreateNewCardEvent(card.cardId, card.code, card.owner, card.value);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="编写业务逻辑"><a href="#编写业务逻辑" class="headerlink" title="编写业务逻辑"></a>编写业务逻辑</h3><p>合约编写完成后，可先到<a href="https://remix.ethereum.org/" target="_blank" rel="noopener">Remix</a>上测试，测试通过后再使用truffle编译和部署到区块链上。之后，便是业务逻辑的编写了。<br>由于<code>truffle</code>，<code>web3</code>等都是依赖于node.js，为了一致性与方便性，本demo也是使用node.js构建业务服务器，主要依赖的模块是<code>express</code>和<code>truffle-contract</code>，前者用于更方便的业务路由和模块化，后者用于更方便调用合约。<br>打开app目录，我们会看到一下的文件结构：</p>
+<ul>
+<li>PetCard.js：宠物卡片业务路由处理以及合约交互</li>
+<li>UserCenter.js：用户中心，负责用户注册和获取所有用户的上层调用</li>
+<li>UserCenterCore.js：用户中心核心，负责业务层与合约层交互</li>
+<li>Web3Provider.js：定义Web3连接的是区块链地址</li>
+<li>package.json：定义npm运行所需要的命令和依赖</li>
+<li>server.js：业务层总入口，负责默认页面、404页面处理，以及各业务模块的中转路由，还有定义服务器绑定的端口</li>
+</ul>
+<p>下面我们主要看PetCard.js中业务层是如何与合约层进行交互的。</p>
+<h4 id="获取合约示例"><a href="#获取合约示例" class="headerlink" title="获取合约示例"></a>获取合约示例</h4><p>这一步我们首先获取宠物卡片合约和用户中心合约的实例，便于下面调用合约，这里我们需要依赖<code>truffle-contract</code>还有本地的<code>Web3Provider</code>模块。而<code>truffle-contract</code>的用法都是链式调用，通过<code>then</code>函数连接起来。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">contract = <span class="built_in">require</span>(<span class="string">'truffle-contract'</span>);</span><br><span class="line">provider = <span class="built_in">require</span>(<span class="string">'./Web3Provider.js'</span>);</span><br><span class="line">express = <span class="built_in">require</span>(<span class="string">"express"</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> PetCard = contract(<span class="built_in">require</span>(<span class="string">'../../build/contracts/PetCard.json'</span>));</span><br><span class="line">PetCard.setProvider(provider);</span><br><span class="line"><span class="keyword">var</span> petCard;</span><br><span class="line">PetCard.deployed().then(<span class="function"><span class="keyword">function</span>(<span class="params">instance</span>)</span>&#123;</span><br><span class="line">    petCard = instance;</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> userCenter;</span><br><span class="line"><span class="built_in">require</span>(<span class="string">'./UserCenterCore.js'</span>).then(<span class="function"><span class="keyword">function</span>(<span class="params">instance</span>) </span>&#123;</span><br><span class="line">    userCenter = instance;</span><br><span class="line">&#125;);</span><br><span class="line"><span class="keyword">var</span> app = <span class="built_in">module</span>.exports = express();</span><br></pre></td></tr></table></figure>
+
+<h4 id="购买卡片-1"><a href="#购买卡片-1" class="headerlink" title="购买卡片"></a>购买卡片</h4><p>从下面代码中可以看到，业务层接受客户端传递的路由参数，再传入合约层，这里合约层函数的参数分两种，一种是自定义参数，另一种就是EVM预设参数，而预设参数是一个对象，需要在最后传入，正如上面<a href="#函数">Solidity函数</a>介绍，预设参数对象需要包括<code>from</code>为调用者地址，<code>value</code>为传入合约的以太币。最后，由于这是直接通过合约实例调用函数，是一个transaction操作，因此如上面<a href="#事件">Solidity事件</a>介绍，我们需要从返回值的日志中获取合约执行后的数据。由于日志拿到的事件参数是一个对象，所以我们直接以json形式返回给客户端即可，例如下面的返回就表示卡片购买失败，原因是卡片当前不在销售：{“cardId”:”1”,”isSuccess”:false,”errorCode”:”4”}。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">app.get(<span class="string">'/buyCard/:address/:cardId/:price'</span>, <span class="function"><span class="keyword">function</span>(<span class="params">req, res</span>) </span>&#123;</span><br><span class="line">    petCard.buyCard(req.params.cardId, &#123;<span class="attr">from</span>: req.params.address, <span class="attr">value</span>: req.params.price&#125;).then(<span class="function"><span class="keyword">function</span>(<span class="params">result</span>) </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (result.logs.length &gt; <span class="number">0</span>) &#123;</span><br><span class="line">            <span class="keyword">var</span> eventObj = result.logs[<span class="number">0</span>].args;</span><br><span class="line">            res.send(<span class="built_in">JSON</span>.stringify(eventObj));</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<h4 id="遍历所有卡片"><a href="#遍历所有卡片" class="headerlink" title="遍历所有卡片"></a>遍历所有卡片</h4><p>遍历卡片的操作并不涉及永久写入合约数据的操作，因此遍历卡片这里我们不使用transaction，而使用call的形式，因此我们可以直接拿到函数的返回值，然后由于函数返回多个值，因此result是一个数组。这里需要注意的是，上面我们说到遍历卡片时合约需要创建三个未知长度的数组，而且遍历的次数也是未知的，因此，estimategas函数预估的gas会不准确，我们这里直接给一个比较大的gas值。该接口返回的例子如：[{“cardId”:”0”,”code”:”0x616161666”,”value”:”4”}]。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">app.get(<span class="string">'/getAllCardsForUser/:address'</span>, <span class="function"><span class="keyword">function</span>(<span class="params">req, res</span>) </span>&#123;</span><br><span class="line">    <span class="comment">// 因为这需要创建未知长度数组，estimate 估计的gas会不准确，该方法慎调</span></span><br><span class="line">    petCard.getAllCardsForUser.call(&#123;<span class="attr">from</span>: req.params.address, <span class="attr">gas</span>: <span class="number">3000000</span>&#125;).then(<span class="function"><span class="keyword">function</span>(<span class="params">result</span>) </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (result.length &gt;= <span class="number">4</span>) &#123;</span><br><span class="line">            <span class="keyword">var</span> cardIds = result[<span class="number">0</span>], codes = result[<span class="number">1</span>], values = result[<span class="number">2</span>];</span><br><span class="line">            <span class="keyword">var</span> len = result[<span class="number">3</span>];</span><br><span class="line">            <span class="keyword">var</span> cards = [];</span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="number">0</span>; i &lt; len; i ++) &#123;</span><br><span class="line">                cards.push(&#123;<span class="attr">cardId</span>: cardIds[i], <span class="attr">code</span>: codes[i], <span class="attr">value</span>: values[i]&#125;);</span><br><span class="line">            &#125;</span><br><span class="line">            res.send(<span class="built_in">JSON</span>.stringify(cards));</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<h4 id="生成卡片-1"><a href="#生成卡片-1" class="headerlink" title="生成卡片"></a>生成卡片</h4><p>生成卡片的逻辑是在所有用户随机挑选一个用户作为卡片的拥有者，然后卡片的code这里先简单地写死了一串，后续可以想更好玩的code生成逻辑，接着就是调用estimateGas函数估计所需的gas，最后才是真正调用合约函数，传入预估的gas，其实比较好的交互应该像以太猫那样，在进行真正的调用之前告知用户交易所需的gas，并可以让用户调整，用户确认后再执行合约函数。下面是生成卡片调用后返回的一个例子：{“cardId”:”2”,”code”:”0x616161666”,”owner”:”0x5727b589bca4500e896ffc82e3fedf56cae7017f”,”value”:”52”}。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">app.get(<span class="string">'/createRandomCard'</span>, <span class="function"><span class="keyword">function</span>(<span class="params">req, res</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">var</span> allUsers,</span><br><span class="line">        randomUser;</span><br><span class="line">    userCenter.showAllPlayers.call().then(<span class="function"><span class="keyword">function</span>(<span class="params">result</span>)</span>&#123;</span><br><span class="line">        allUsers = result;</span><br><span class="line">        randomIdx = <span class="built_in">Math</span>.floor(<span class="built_in">Math</span>.random() * allUsers.length);</span><br><span class="line">        randomUser = allUsers[randomIdx];</span><br><span class="line">        <span class="keyword">if</span> (randomUser != <span class="literal">undefined</span>) &#123;</span><br><span class="line">            <span class="keyword">var</span> cardCode = <span class="string">"aaaforestlinbbb"</span>;</span><br><span class="line">            <span class="keyword">var</span> cardValue = <span class="built_in">Math</span>.floor(<span class="built_in">Math</span>.random() * <span class="number">100</span> + <span class="number">1</span>);</span><br><span class="line">            petCard.createNewCardForUser.estimateGas(cardCode, cardValue).then(<span class="function"><span class="keyword">function</span>(<span class="params">esti_gas</span>) </span>&#123;</span><br><span class="line">                <span class="keyword">return</span> petCard.createNewCardForUser(cardCode, cardValue, &#123;<span class="attr">from</span>: randomUser, <span class="attr">gas</span>: esti_gas&#125;);</span><br><span class="line">            &#125;).then(<span class="function"><span class="keyword">function</span>(<span class="params">rest</span>) </span>&#123;</span><br><span class="line">                <span class="keyword">if</span> (rest.logs.length &gt; <span class="number">0</span>) &#123;</span><br><span class="line">                    <span class="keyword">var</span> eventObj = rest.logs[<span class="number">0</span>].args;</span><br><span class="line">                    res.send(<span class="built_in">JSON</span>.stringify(eventObj));</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;);</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            res.send(<span class="string">"random user is undefined"</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<h2 id="总结DApp开发中遇到的坑"><a href="#总结DApp开发中遇到的坑" class="headerlink" title="总结DApp开发中遇到的坑"></a>总结DApp开发中遇到的坑</h2><p>一个DApp开发流程介绍到此结束，下面总结一下开发中值得注意的地方：</p>
+<ul>
+<li>Solidity这个语言目前还不是很完善，版本还是0.4.x，而且文档相对其他语言较少，这里除了<a href="https://solidity.readthedocs.io/en/develop/index.html" target="_blank" rel="noopener">官网</a>，还推荐两个论坛<a href="http://www.tryblockchain.org/" target="_blank" rel="noopener">区块链技术博客</a>和<a href="http://ethfans.org/?page=1" target="_blank" rel="noopener">以太坊爱好者</a>供大家参考。</li>
+<li>合约函数中慎用未知长度的数组以及遍历操作，比较耗费gas，而且对于调用者极不友好，无法预估gas。</li>
+<li>对于不需要写操作的函数，我们可以加上constant修饰符或者调用时使用call的方法而非直接调用，不产生transaction，也就不需要写入区块链。</li>
+<li>对于不需要的数组我们可以使用delete操作删除整个数组或者某个元素，可以归还一些gas，但是最好复用，使用指示器标记当前使用的长度，因为delete操作本身也是需要耗费gas的。</li>
+<li>合约内不适合做业务过重的操作，如上面的生成卡片操作，应该将逻辑放在业务层，毕竟在EVM中没执行一行代码都是需要gas的，合约应该只有读写区块链的操作。</li>
+</ul>
+
+                
+
+                <hr>
+                <!-- Pager -->
+                <ul class="pager">
+                    
+                        <li class="previous">
+                            <a href="/2018/08/20/打造第一个自训练模型的Core-ML应用/" data-toggle="tooltip" data-placement="top" title="打造第一个自训练模型的Core ML应用">&larr; Previous Post</a>
+                        </li>
+                    
+                    
+                </ul>
+
+                <!-- duoshuo Share start -->
+                
+                <!-- 多说 Share end-->
+
+                <!-- 多说评论框 start -->
+                
+                <!-- 多说评论框 end -->
+
+                <!-- disqus comment start -->
+                
+                <!-- disqus comment end -->
+            </div>
+            
+            <!-- Tabe of Content -->
+            <!-- Table of Contents -->
+
+    
+      <aside id="sidebar">
+        <div id="toc" class="toc-article">
+        <strong class="toc-title">Contents</strong>
+        
+          <ol class="toc-nav"><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#以太坊DApp介绍"><span class="toc-nav-number">1.</span> <span class="toc-nav-text">以太坊DApp介绍</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#开发准备"><span class="toc-nav-number">2.</span> <span class="toc-nav-text">开发准备</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#开发以太坊DApp需要安装以下环境或工具，以Mac-OS-X为例"><span class="toc-nav-number">2.1.</span> <span class="toc-nav-text">开发以太坊DApp需要安装以下环境或工具，以Mac OS X为例</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#以下是非必需工具"><span class="toc-nav-number">2.2.</span> <span class="toc-nav-text">以下是非必需工具</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#编程语言"><span class="toc-nav-number">2.3.</span> <span class="toc-nav-text">编程语言</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#智能合约"><span class="toc-nav-number">2.3.1.</span> <span class="toc-nav-text">智能合约</span></a></li><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#业务逻辑"><span class="toc-nav-number">2.3.2.</span> <span class="toc-nav-text">业务逻辑</span></a></li></ol></li></ol></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#DApp实践"><span class="toc-nav-number">3.</span> <span class="toc-nav-text">DApp实践</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#Demo功能介绍"><span class="toc-nav-number">3.1.</span> <span class="toc-nav-text">Demo功能介绍</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#Demo目录结构"><span class="toc-nav-number">3.2.</span> <span class="toc-nav-text">Demo目录结构</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#Demo运行方式"><span class="toc-nav-number">3.3.</span> <span class="toc-nav-text">Demo运行方式</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#编写智能合约"><span class="toc-nav-number">3.4.</span> <span class="toc-nav-text">编写智能合约</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#定义卡片结构与成员变量"><span class="toc-nav-number">3.4.1.</span> <span class="toc-nav-text">定义卡片结构与成员变量</span></a></li><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#函数"><span class="toc-nav-number">3.4.2.</span> <span class="toc-nav-text">函数</span></a></li><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#构建函数和匿名函数"><span class="toc-nav-number">3.4.3.</span> <span class="toc-nav-text">构建函数和匿名函数</span></a></li><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#事件"><span class="toc-nav-number">3.4.4.</span> <span class="toc-nav-text">事件</span></a></li><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#购买卡片"><span class="toc-nav-number">3.4.5.</span> <span class="toc-nav-text">购买卡片</span></a></li><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#遍历卡片"><span class="toc-nav-number">3.4.6.</span> <span class="toc-nav-text">遍历卡片</span></a></li><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#生成卡片"><span class="toc-nav-number">3.4.7.</span> <span class="toc-nav-text">生成卡片</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#编写业务逻辑"><span class="toc-nav-number">3.5.</span> <span class="toc-nav-text">编写业务逻辑</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#获取合约示例"><span class="toc-nav-number">3.5.1.</span> <span class="toc-nav-text">获取合约示例</span></a></li><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#购买卡片-1"><span class="toc-nav-number">3.5.2.</span> <span class="toc-nav-text">购买卡片</span></a></li><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#遍历所有卡片"><span class="toc-nav-number">3.5.3.</span> <span class="toc-nav-text">遍历所有卡片</span></a></li><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#生成卡片-1"><span class="toc-nav-number">3.5.4.</span> <span class="toc-nav-text">生成卡片</span></a></li></ol></li></ol></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#总结DApp开发中遇到的坑"><span class="toc-nav-number">4.</span> <span class="toc-nav-text">总结DApp开发中遇到的坑</span></a></li></ol>
+        
+        </div>
+      </aside>
+    
+
+                
+            <!-- Sidebar Container -->
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                sidebar-container">
+
+                <!-- Featured Tags -->
+                
+                <section>
+                    <!-- no hr -->
+                    <h5><a href="/tags/">FEATURED TAGS</a></h5>
+                    <div class="tags">
+                       
+                          <a class="tag" href="/tags/#区块链" title="区块链">区块链</a>
+                        
+                          <a class="tag" href="/tags/#以太坊" title="以太坊">以太坊</a>
+                        
+                          <a class="tag" href="/tags/#智能合约" title="智能合约">智能合约</a>
+                        
+                          <a class="tag" href="/tags/#Solidity" title="Solidity">Solidity</a>
+                        
+                    </div>
+                </section>
+                
+
+                <!-- Friends Blog -->
+                
+                <hr>
+                <h5>FRIENDS</h5>
+                <ul class="list-inline">
+
+                    
+                </ul>
+                
+            </div>
+        </div>
+    </div>
+</article>
+
+
+
+
+
+
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+<!-- anchor-js, Doc:http://bryanbraun.github.io/anchorjs/ -->
+<script>
+    async("https://cdn.bootcss.com/anchor-js/1.1.1/anchor.min.js",function(){
+        anchors.options = {
+          visible: 'hover',
+          placement: 'left',
+          icon: 'ℬ'
+        };
+        anchors.add().remove('.intro-header h1').remove('.subheading').remove('.sidebar-container h5');
+    })
+</script>
+<style>
+    /* place left on bigger screen */
+    @media all and (min-width: 800px) {
+        .anchorjs-link{
+            position: absolute;
+            left: -0.75em;
+            font-size: 1.1em;
+            margin-top : -0.1em;
+        }
+    }
+</style>
+
+
+
+    <!-- Footer -->
+    <!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                
+                
+                
+
+                
+
+                
+
+                
+                    <li>
+                        <a target="_blank"  href="https://github.com/forrestlam">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+
+                </ul>
+                <p class="copyright text-muted">
+                    Copyright &copy; Forrest Lam 2019 
+                </p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+<script src="/js/jquery.min.js"></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="/js/bootstrap.min.js"></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/js/hux-blog.min.js"></script>
+
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+
+<!-- 
+     Because of the native support for backtick-style fenced code blocks 
+     right within the Markdown is landed in Github Pages, 
+     From V1.6, There is no need for Highlight.js, 
+     so Huxblog drops it officially.
+
+     - https://github.com/blog/2100-github-pages-now-faster-and-simpler-with-jekyll-3-0  
+     - https://help.github.com/articles/creating-and-highlighting-code-blocks/    
+-->
+<!--
+    <script>
+        async("http://cdn.bootcss.com/highlight.js/8.6/highlight.min.js", function(){
+            hljs.initHighlightingOnLoad();
+        })
+    </script>
+    <link href="http://cdn.bootcss.com/highlight.js/8.6/styles/github.min.css" rel="stylesheet">
+-->
+
+
+<!-- jquery.tagcloud.js -->
+<script>
+    // only load tagcloud.js in tag.html
+    if($('#tag_cloud').length !== 0){
+        async("http://forrestlam.github.io/js/jquery.tagcloud.js",function(){
+            $.fn.tagcloud.defaults = {
+                //size: {start: 1, end: 1, unit: 'em'},
+                color: {start: '#bbbbee', end: '#0085a1'},
+            };
+            $('#tag_cloud a').tagcloud();
+        })
+    }
+</script>
+
+<!--fastClick.js -->
+<script>
+    async("https://cdn.bootcss.com/fastclick/1.0.6/fastclick.min.js", function(){
+        var $nav = document.querySelector("nav");
+        if($nav) FastClick.attach($nav);
+    })
+</script>
+
+
+<!-- Google Analytics -->
+
+
+
+
+<!-- Baidu Tongji -->
+
+
+
+
+
+
+	<a id="rocket" href="#top" class=""></a>
+	<script type="text/javascript" src="/js/totop.js?v=1.0.0" async=""></script>
+    <script type="text/javascript" src="/js/toc.js?v=1.0.0" async=""></script>
+<!-- Image to hack wechat -->
+<img src="http://forrestlam.github.io/img/icon_wechat.png" width="0" height="0" />
+<!-- Migrate from head to bottom, no longer block render and still work -->
+
+</body>
+
+</html>
